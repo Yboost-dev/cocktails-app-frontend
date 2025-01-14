@@ -1,11 +1,9 @@
-// App.js
 import React, {useState} from "react";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import PublicRoute from "routes/publicRoute/PublicRoute";
 import PrivateRoute from "routes/privateRoute/PrivateRoute";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-// Importez vos pages/components
 import Home from "scenes/home/Home";
 import Login from "scenes/login/Login";
 import Dashboard from "scenes/dashboard/Dashboard";
