@@ -1,5 +1,5 @@
 import React from 'react';
-import './Element.css';
+import './Element.scss';
 import {Link, useLocation} from "react-router-dom";
 
 const Element = ({href, text}) => {

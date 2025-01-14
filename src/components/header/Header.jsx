@@ -1,5 +1,5 @@
 import React from 'react';
-import './Header.css';
+import './Header.scss';
 import Element from "./components/elements/Element";
 import Search from "./components/search/Search";
 
@@ -7,7 +7,7 @@ const Header = () => {
     return (
         <header className="header-container">
             <div className="header-logo">
-                <img src="logo.png" alt=""/>
+                <img src="img/logo.png" alt=""/>
             </div>
             <div className="header-elements">
                 <Element href="/" text="Accueil"/>
