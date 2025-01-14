@@ -1,0 +1,65 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+
+# Production build
+build/
+dist/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE-specific files
+.vscode/
+.idea/
+*.iml
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Test coverage directories
+coverage/
+
+# Temp files
+*.tmp
+*.swp
+*.pid
+*.seed
+*.pid.lock
+
+# Generated files
+/public/assets/
+.sass-cache/
+*.cache
+*.eslintcache
+*.css.map
+*.js.map
+
+# Optional npm cache folder
+.npm/
+
+# Yarn-specific files
+.pnp/
+.pnp.js
+
+# Parcel-bundler cache
+.cache/
+
+# Storybook files
+.out/
+storybook-static/
+
+# TypeScript
+*.tsbuildinfo
+
+# Files related to bundlers
+.cache-loader
