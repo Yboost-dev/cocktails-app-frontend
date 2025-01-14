@@ -1,18 +1,7 @@
 import React from "react";
 
 const NotFound = () => {
-    return (
-        <section>
-            <div>
-                <div>
-
-                </div>
-                <div>
-
-                </div>
-            </div>
-        </section>
-    );
+    return <h1>404 - Page non trouvée</h1>;
 };
 
 export default NotFound;
