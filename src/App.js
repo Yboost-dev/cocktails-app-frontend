@@ -18,6 +18,16 @@ const App = () => {
                 <Route element={<PublicRoute isAuthenticated={isAuthenticated}/>}>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/login" element={<Login/>}/>
+
+                    {/* Routes catégories */}
+                    <Route path="/cocktails" element={<Home/>}/>
+                    <Route path="/mocktails" element={<Home/>}/>
+                    <Route path="/indemodables" element={<Home/>}/>
+                    <Route path="/spiritueux" element={<Home/>}/>
+                    <Route path="/softs" element={<Home/>}/>
+                    <Route path="/shooters" element={<Home/>}/>
+                    <Route path="/long-drink" element={<Home/>}/>
+                    <Route path="/short-drink" element={<Home/>}/>
                 </Route>
 
                 {/* Routes privées */}

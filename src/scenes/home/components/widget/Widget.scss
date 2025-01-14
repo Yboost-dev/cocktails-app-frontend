@@ -1,0 +1,88 @@
+.elementor-widget-wrap {
+  padding: 10px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  flex-wrap: wrap;
+  align-content: flex-start;
+
+  .elementor-element {
+    width: 100%;
+    height: 100%;
+
+    .elementor-widget-container {
+      transition: background .3s, border .3s, border-radius .3s, box-shadow .3s, transform 4s ease;
+      height: 100%;
+
+      .widget-category-banner {
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 0px 0px;
+        position: relative;
+        height: 100%;
+        width: 100%;
+
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.3);
+          z-index: 1;
+        }
+
+        .item-inner {
+          .category-box-content {
+            margin: 0;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            left: 0;
+            padding: 0 30px;
+            bottom: 20px;
+            z-index: 99;
+            .category-box-title {
+              color: #fff;
+              font-size: 24px;
+              line-height: 1.2;
+              letter-spacing: 0.5px;
+              text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+              text-transform: uppercase;
+              font-weight: 800;
+              margin: 0;
+            }
+            .category-box-subtitle {
+              text-decoration: none;
+              position: relative;
+              color: #fff;
+              font-size: 16px;
+              line-height: 1.2;
+              letter-spacing: 0.5px;
+              text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+              text-transform: uppercase;
+              font-weight: 400;
+              margin-top: 3px;
+              &:after {
+                content: "";
+                position: absolute;
+                height: 3px;
+                width:100%;
+                bottom: -4px;
+                left: 0;
+                background-color: #fff;
+                transform: scaleX(0.6);
+                transform-origin: left;
+                transition: transform 0.3s ease-in-out;
+              }
+              &:hover:after {
+                transform: scaleX(1);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

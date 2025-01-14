@@ -19,11 +19,11 @@
             transition: transform 0.3s ease-in-out;
         }
         &:hover:after {
-            transform: scaleX(1);
+            transform: scaleX(0.8);
         }
     }
     .element-link-active:after {
-        transform: scaleX(1);
+        transform: scaleX(0.8);
     }
 }
 
