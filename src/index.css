@@ -5,9 +5,41 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--background);
+  color: var(--text);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+:root {
+  --primary: #BC90F7;
+  --secondary: #FFB100;
+
+  --text: #121212;
+  --text-secondary: #656d78;
+
+  --background: #FBFEFB;
+  --surface: #FBFEFB;
+  --low: #1f1f1f;
+
+  --divider: #e1e1e1;
+
+  --red: #dc0a0a;
+}
+
+/** Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #FEFBFE;
+
+    --background: #121212;
+    --surface: #1e1e1e;
+
+    --divider: #e1e1e1;
+
+    --red: #FF4C4C;
+  }
 }

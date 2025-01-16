@@ -5,7 +5,8 @@ import PrivateRoute from "routes/privateRoute/PrivateRoute";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import Home from "scenes/home/Home";
-import Login from "scenes/login/Login";
+import Login from "scenes/admin/auth/login/Login";
+import Register from "scenes/admin/auth/register/Register";
 import Dashboard from "scenes/dashboard/Dashboard";
 import NotFound from "scenes/notFound/NotFound";
 
@@ -14,10 +15,13 @@ const App = () => {
     return (
         <Router>
             <Routes>
-                {/* Routes publiques */}
+                {/* Routes public */}
                 <Route element={<PublicRoute isAuthenticated={isAuthenticated}/>}>
                     <Route path="/" element={<Home/>}/>
-                    <Route path="/login" element={<Login/>}/>
+
+                    {/* Routes authentication */}
+                    <Route path="/admin/auth/login" element={<Login/>}/>
+                    <Route path="/admin/auth/register" element={<Register/>}/>
 
                     {/* Routes catégories */}
                     <Route path="/cocktails" element={<Home/>}/>
@@ -30,12 +34,12 @@ const App = () => {
                     <Route path="/short-drink" element={<Home/>}/>
                 </Route>
 
-                {/* Routes privées */}
+                {/* Routes private */}
                 <Route element={<PrivateRoute isAuthenticated={isAuthenticated}/>}>
                     <Route path="/admin/dashboard" element={<Dashboard/>}/>
                 </Route>
 
-                {/* Route pour toute page inexistante */}
+                {/* Route not found */}
                 <Route path="*" element={<NotFound/>}/>
             </Routes>
         </Router>

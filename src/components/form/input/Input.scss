@@ -1,0 +1,40 @@
+.form-group {
+  position: relative;
+  width: 100%;
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  input {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+    background: none;
+    transition: all 0.3s ease;
+    color: var(--text);
+    &:focus {
+      border: 1px solid var(--primary);
+    }
+    &:focus ~ label {
+      top: -20px;
+      color: var(--primary)
+    }
+    &:-webkit-autofill {
+      background-color: transparent !important;
+      -webkit-box-shadow: 0 0 0 1000px var(--background) inset !important;
+      -webkit-text-fill-color: var(--text) !important;
+    }
+  }
+  label {
+    position: absolute;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    top: -10px;
+    left: 10px;
+    padding: 0 7px;
+    background-color: var(--background);
+    transition: all 0.3s ease;
+  }
+}
