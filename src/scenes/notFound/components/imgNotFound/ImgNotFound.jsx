@@ -4,7 +4,7 @@ import './ImgNotFound.scss';
 const ImgNotFound = () => {
     return (
         <div className="img-not-found">
-            <img src="img/404.png" alt="404"/>
+            <img src="/img/404.png" alt="404"/>
         </div>
     );
 };

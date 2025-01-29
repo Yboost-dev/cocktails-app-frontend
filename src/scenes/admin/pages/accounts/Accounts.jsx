@@ -20,7 +20,7 @@ const Accounts = () => {
             <NavBar/>
             <p>Comptes</p>
             {users.map((user) => (
-                <div>
+                <div key={user.id}>
                     <p>{user.id}</p>
                     <p>{user.firstname}</p>
                     <p>{user.lastname}</p>

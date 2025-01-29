@@ -7,6 +7,7 @@ import Home from "scenes/home/Home";
 import Login from "scenes/admin/auth/login/Login";
 import Register from "scenes/admin/auth/register/Register";
 import Dashboard from "scenes/admin/pages/dashboard/Dashboard";
+import Orders from "scenes/admin/pages/orders/Orders";
 import Accounts from "scenes/admin/pages/accounts/Accounts";
 import Articles from "scenes/admin/pages/articles/Articles";
 import Category from "scenes/admin/pages/category/Category";
@@ -37,6 +38,7 @@ const App = () => {
                 {/* Routes private */}
                 <Route element={<PrivateRoute/>}>
                     <Route path="/admin/dashboard" element={<Dashboard/>}/>
+                    <Route path="/admin/orders" element={<Orders/>}/>
                     <Route path="/admin/accounts" element={<Accounts/>}/>
                     <Route path="/admin/articles" element={<Articles/>}/>
                     <Route path="/admin/category" element={<Category/>}/>
