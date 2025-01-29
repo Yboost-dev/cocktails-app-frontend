@@ -1,7 +1,12 @@
 import React from "react";
 
 const Dashboard = () => {
-    return <h1>Bienvenue sur votre tableau de bord</h1>;
+
+    return (
+        <div>
+            <p>dashboard</p>
+        </div>
+    );
 };
 
 export default Dashboard;
