@@ -31,3 +31,8 @@ code {
 
   --red: #dc0a0a;
 }
+
+.dashboard-global{
+  display: flex;
+  flex-direction: row;
+}

@@ -28,6 +28,10 @@ const NavBar = () => {
             </div>
             <div className="nav-bar-options">
                 <Button text="Dashboard" link="/admin/dashboard"/>
+                <Button text="Articles" link="/admin/articles"/>
+                <Button text="Categories" link="/admin/category"/>
+                <Button text="Ingredients" link="/admin/ingredients"/>
+                <Button text="Comptes" link="/admin/accounts"/>
             </div>
         </nav>
     );

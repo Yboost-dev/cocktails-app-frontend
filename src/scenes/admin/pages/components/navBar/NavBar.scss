@@ -10,4 +10,10 @@
       width: 100%;
     }
   }
+  .nav-bar-options{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
+

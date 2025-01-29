@@ -5,6 +5,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL;
 export const login = async (email, password) => {
     try {
         console.log(email, password);
+        console.log(API_BASE_URL)
         const response = await fetch(`${API_BASE_URL}/auth/login`, {
             method: "POST",
             headers: {

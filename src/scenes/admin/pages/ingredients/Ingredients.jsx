@@ -1,15 +1,15 @@
 import React from "react";
 import NavBar from "../components/navBar/NavBar";
 
-const Dashboard = () => {
+const Ingredients = () => {
 
     return (
-        <div className="dashboard-global">
+        <div>
             <NavBar/>
-            <p>Dashboard</p>
+            <p>Ingrédients</p>
             
         </div>
     );
 };
 
-export default Dashboard;
+export default Ingredients;

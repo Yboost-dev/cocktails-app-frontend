@@ -7,6 +7,10 @@ import Home from "scenes/home/Home";
 import Login from "scenes/admin/auth/login/Login";
 import Register from "scenes/admin/auth/register/Register";
 import Dashboard from "scenes/admin/pages/dashboard/Dashboard";
+import Accounts from "scenes/admin/pages/accounts/Accounts";
+import Articles from "scenes/admin/pages/articles/Articles";
+import Category from "scenes/admin/pages/category/Category";
+import Ingredients from "scenes/admin/pages/ingredients/Ingredients";
 import NotFound from "scenes/notFound/NotFound";
 
 const App = () => {
@@ -33,6 +37,10 @@ const App = () => {
                 {/* Routes private */}
                 <Route element={<PrivateRoute/>}>
                     <Route path="/admin/dashboard" element={<Dashboard/>}/>
+                    <Route path="/admin/accounts" element={<Accounts/>}/>
+                    <Route path="/admin/articles" element={<Articles/>}/>
+                    <Route path="/admin/category" element={<Category/>}/>
+                    <Route path="/admin/ingredients" element={<Ingredients/>}/>
                 </Route>
 
                 {/* Route not found */}
