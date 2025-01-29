@@ -20,6 +20,7 @@ code {
 
   --text: #121212;
   --text-secondary: #656d78;
+  --grey: #c8c8c8;
 
   --drop-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
@@ -30,9 +31,22 @@ code {
   --divider: #e1e1e1;
 
   --red: #dc0a0a;
+  --red-hover: #c00000;
+  --green: #009900;
+  --green-hover: #008000;
+  --blue: #0095ff;
+  --blue-hover: #0077cc;
 }
 
 .dashboard-global{
   display: flex;
   flex-direction: row;
+}
+
+.dashboard-content {
+  width: 100%;
+}
+
+.dashboard-content-body {
+  padding: 0 2rem;
 }

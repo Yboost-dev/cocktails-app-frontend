@@ -1,12 +1,12 @@
 // Fonction pour se connecter (login)
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL;
 
 export const login = async (email, password) => {
     try {
         console.log(email, password);
-        console.log(API_BASE_URL)
-        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        console.log(API_URL)
+        const response = await fetch(`${API_URL}/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -36,7 +36,7 @@ export const getUser = async (token) => {
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/me`, {
+        const response = await fetch(`${API_URL}/auth/me`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,

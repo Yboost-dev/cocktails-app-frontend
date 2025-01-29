@@ -1,0 +1,51 @@
+.tableau {
+  .tableau-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .btn-admin-link {
+      background-color: var(--green);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      text-decoration: none;
+      &:hover {
+        background-color: var(--green-hover);
+      }
+    }
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+
+    th, td {
+      width: 10%;
+      border: 1px solid var(--grey);
+      text-align: center;
+      padding: 5px;
+      button {
+        margin-right: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        &.edit-btn {
+          &:hover {
+            color: var(--blue-hover);
+          }
+        }
+        &.delete-btn {
+          &:hover {
+            color: var(--red-hover);
+          }
+        }
+      }
+    }
+
+    tr {
+      border-bottom: 1px solid var(--grey);
+    }
+  }
+}

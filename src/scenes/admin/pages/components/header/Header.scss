@@ -1,0 +1,21 @@
+.header-admin {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  width: 100%;
+  height: 4rem;
+  box-shadow: var(--drop-shadow);
+  .header-admin-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    .btn-admin-link {
+      color: var(--red);
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

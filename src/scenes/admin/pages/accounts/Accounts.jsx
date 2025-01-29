@@ -1,33 +1,23 @@
 import React, {useState, useEffect} from "react";
 import NavBar from "../components/navBar/NavBar";
-import { getAllUsers } from "services/auth/accountService";
+import Header from "../components/header/Header";
+import Tableau from "./components/tableau/Tableau";
+
 
 const Accounts = () => {
-    const [users, setUsers] = useState([])
-
-    useEffect(() => {
-        getAllUsers()
-            .then((data) => {
-                setUsers(data);
-            })
-            .catch((error) => {
-                console.error("Une erreur est survenue, oupsi.. :", error)
-            })
-    }, []) 
-
     return (
         <div className="dashboard-global">
             <NavBar/>
-            <p>Comptes</p>
-            {users.map((user) => (
-                <div key={user.id}>
-                    <p>{user.id}</p>
-                    <p>{user.firstname}</p>
-                    <p>{user.lastname}</p>
-                    <p>{user.email}</p>
-                    <p>{user.role}</p>
+            <div className="dashboard-content">
+                <Header/>
+                <div className="dashboard-content-body">
+                    <h1>Comptes</h1>
+                    <div>
+                        <Tableau/>
+                    </div>
                 </div>
-            ))}
+            </div>
+
         </div>
     );
 };
