@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet, Navigate } from "react-router-dom";
-import { getUser } from "services/auth/Auth";
+import { getUser } from "services/auth/authService";
 
 const PrivateRoute = () => {
     const [user, setUser] = React.useState(null);

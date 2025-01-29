@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getUser } from "../services/auth/Auth";
+import { getUser } from "services/auth/authService";
 
 const useCurrentUser = () => {
     const [user, setUser] = useState(null);
@@ -30,7 +30,6 @@ const useCurrentUser = () => {
         fetchUser();
     }, []);
 
-    console.log(user);
     return { user, loading, error };
 };
 

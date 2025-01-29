@@ -3,7 +3,7 @@ import './Form.scss';
 
 import Input from 'components/form/input/Input';
 import Button from "components/form/button/Button";
-import { login } from "services/auth/Auth"; // Importez la fonction login
+import { login } from "services/auth/authService";
 
 const Form = ({ onSuccess, onError }) => {
     const [email, setEmail] = useState('');
