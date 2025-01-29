@@ -1,0 +1,13 @@
+.nav-bar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 7rem;
+  box-shadow: var(--drop-shadow);
+  .nav-bar-logo {
+    width: 100%;
+    img {
+      width: 100%;
+    }
+  }
+}

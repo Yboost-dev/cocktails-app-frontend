@@ -21,6 +21,8 @@ code {
   --text: #121212;
   --text-secondary: #656d78;
 
+  --drop-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
   --background: #FBFEFB;
   --surface: #FBFEFB;
   --low: #1f1f1f;
@@ -28,18 +30,4 @@ code {
   --divider: #e1e1e1;
 
   --red: #dc0a0a;
-}
-
-/** Dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #FEFBFE;
-
-    --background: #121212;
-    --surface: #1e1e1e;
-
-    --divider: #e1e1e1;
-
-    --red: #FF4C4C;
-  }
 }

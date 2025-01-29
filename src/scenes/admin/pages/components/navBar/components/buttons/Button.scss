@@ -1,0 +1,13 @@
+.btn-nav {
+  margin: 0 10px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  text-decoration: none;
+  &:hover {
+    color: var(--primary);
+  }
+  &.element-link-active {
+    font-weight: 600;
+    color: var(--primary);
+  }
+}
