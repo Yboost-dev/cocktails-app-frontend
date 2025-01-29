@@ -4,7 +4,7 @@ import NavBar from "../components/navBar/NavBar";
 const Ingredients = () => {
 
     return (
-        <div>
+        <div className="dashboard-global">
             <NavBar/>
             <p>Ingrédients</p>
             

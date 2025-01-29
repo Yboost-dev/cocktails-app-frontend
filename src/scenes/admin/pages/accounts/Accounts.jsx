@@ -4,7 +4,7 @@ import NavBar from "../components/navBar/NavBar";
 const Accounts = () => {
 
     return (
-        <div>
+        <div className="dashboard-global">
             <NavBar/>
             <p>Comptes</p>
             

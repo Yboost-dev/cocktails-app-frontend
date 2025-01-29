@@ -16,7 +16,7 @@ const Articles = () => {
     }, []);
 
     return (
-        <div>
+        <div className="dashboard-global">
             <NavBar />
             <p>Articles</p>
             {articles.map((article) => (

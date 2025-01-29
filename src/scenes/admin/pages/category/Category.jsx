@@ -4,7 +4,7 @@ import NavBar from "../components/navBar/NavBar";
 const Category = () => {
 
     return (
-        <div>
+        <div className="dashboard-global">
             <NavBar/>
             <p>Catégories</p>
             
