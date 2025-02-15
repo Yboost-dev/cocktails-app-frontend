@@ -45,7 +45,7 @@ const Tableau = () => {
                     <th>Prénom</th>
                     <th>Email</th>
                     <th>Rôle</th>
-                    <th>Options</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
