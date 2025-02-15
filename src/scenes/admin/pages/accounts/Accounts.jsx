@@ -17,7 +17,6 @@ const Accounts = () => {
                     </div>
                 </div>
             </div>
-
         </div>
     );
 };

@@ -1,30 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import NavBar from "../components/navBar/NavBar";
-import { getAllArticles } from "services/articles/articlesService";
+import Header from "../components/header/Header";
+import Tableau from "./components/tableau/Tableau";
 
 const Articles = () => {
-    const [articles, setArticles] = useState([]);
-
-    useEffect(() => {
-        getAllArticles()
-            .then((data) => {
-                setArticles(data);
-            })
-            .catch((error) => {
-                console.error("Une erreur est survenue :", error);
-            });
-    }, []);
-
     return (
         <div className="dashboard-global">
             <NavBar/>
-            <p>Articles</p>
-            {articles.map((article) => (
-                <div key={article.id}>
-                    <p>{article.title}</p>
-                    <p>{article.price}</p>
+            <div className="dashboard-content">
+                <Header/>
+                <div className="dashboard-content-body">
+                    <p>Articles</p>
+                    <div>
+                        <Tableau/>
+                    </div>
                 </div>
-            ))}
+            </div>
         </div>
     );
 };
