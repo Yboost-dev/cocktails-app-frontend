@@ -1,42 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import './Tableau.scss';
+import FormCreateUser from './components/formCreateUser';
 import { getAllUsers } from "services/auth/accountService";
-import {Link} from "react-router-dom";
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const Tableau = () => {
     const [users, setUsers] = useState([]);
+    const [showModal, setShowModal] = useState(false); // État pour gérer la pop-up
 
     useEffect(() => {
         getAllUsers()
-            .then((data) => {
-                setUsers(data);
-            })
-            .catch((error) => {
-                console.error("Une erreur est survenue, oupsi.. :", error)
-            })
+            .then((data) => setUsers(data))
+            .catch((error) => console.error("Une erreur est survenue, oupsi.. :", error));
     }, []);
 
     const handleEdit = (id) => {
         console.log(`Modifier l'utilisateur : ${id}`);
-        // Ajoutez la logique de l'édition ici
     };
 
     const handleDelete = (id) => {
         console.log(`Supprimer l'utilisateur : ${id}`);
-        // Ajoutez la logique de la suppression ici
     };
 
-    const capitalizeFirstLetter = text => text.charAt(0).toUpperCase() + text.slice(1);
+    const handleSave = (user) => {
+        console.log('Enregistrer un nouvel utilisateur :', user);
+        // Ajoutez ici la logique pour envoyer les données du formulaire à une API ou mettre à jour la liste des utilisateurs
+        setUsers((prevUsers) => [...prevUsers, { id: prevUsers.length + 1, ...user }]); // Mise à jour locale pour l'exemple
+    };
 
     return (
         <div className="tableau">
             <div className="tableau-header">
                 <h3>Tableau des utilisateurs</h3>
-                <Link to="/admin/accounts/add" className="btn-admin-link">
+                {/* Bouton pour ouvrir la pop-up */}
+                <button onClick={() => setShowModal(true)} className="btn-admin">
                     Ajouter un utilisateur
-                </Link>
+                </button>
             </div>
+
             <table>
                 <thead>
                 <tr>
@@ -53,7 +54,7 @@ const Tableau = () => {
                     <tr key={user.id}>
                         <td>{user.id}</td>
                         <td>{user.lastname.toUpperCase()}</td>
-                        <td>{capitalizeFirstLetter(user.firstname)}</td>
+                        <td>{user.firstname}</td>
                         <td>{user.email}</td>
                         <td>{user.role}</td>
                         <td>
@@ -64,6 +65,18 @@ const Tableau = () => {
                 ))}
                 </tbody>
             </table>
+
+            {/* Pop-up contenant le formulaire */}
+            {showModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <FormCreateUser
+                            onClose={() => setShowModal(false)} // Ferme la pop-up
+                            onSave={handleSave} // Fonction pour gérer la sauvegarde
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
