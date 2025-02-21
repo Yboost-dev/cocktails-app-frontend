@@ -3,7 +3,7 @@ import './Tableau.scss';
 import FormCreateUser from './components/formCreateUser/formCreateUser';
 import {getAllUsers} from "services/auth/accountService";
 import {register, deleteUser} from "services/auth/authService";
-import {UserX, UserPen} from 'lucide-react';
+import {UserX} from 'lucide-react';
 
 import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,11 +23,7 @@ const Tableau = ({onSuccess, onError}) => {
             .then((data) => setUsers(data))
             .catch((error) => console.error("Une erreur est survenue, oupsi.. :", error));
     }, []);
-
-    const handleEdit = (id) => {
-        console.log(`Modifier l'utilisateur : ${id}`);
-    };
-
+    
     const handleDelete = (id) => {
         setUserToDelete(id); // Stocke l'identifiant de l'utilisateur à supprimer
         setShowDeletePopup(true); // Ouvre la pop-up de confirmation
@@ -106,7 +102,6 @@ const Tableau = ({onSuccess, onError}) => {
                         <td>{user.email}</td>
                         <td>{user.role}</td>
                         <td>
-                            <button onClick={() => handleEdit(user.id)} className="edit-btn"><UserPen/></button>
                             <button onClick={() => handleDelete(user.id)} className="delete-btn"><UserX/></button>
                         </td>
                     </tr>
