@@ -5,7 +5,6 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import Home from "scenes/home/Home";
 import Login from "scenes/admin/auth/login/Login";
-import Register from "scenes/admin/auth/register/Register";
 import Dashboard from "scenes/admin/pages/dashboard/Dashboard";
 import Orders from "scenes/admin/pages/orders/Orders";
 import Accounts from "scenes/admin/pages/accounts/Accounts";
@@ -23,7 +22,6 @@ const App = () => {
 
                 {/* Routes authentication */}
                 <Route path="/admin/auth/login" element={<Login/>}/>
-                <Route path="/admin/auth/register" element={<Register/>}/>
 
                 {/* Routes catégories */}
                 <Route path="/cocktails" element={<Home/>}/>

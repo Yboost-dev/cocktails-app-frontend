@@ -29,6 +29,30 @@ export const login = async (email, password) => {
     }
 };
 
+export const register = async (user) => {
+    const token = isAuthenticated();
+    try {
+        const response = await fetch(`${API_URL}/users`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(user), // Envoie les données utilisateur au serveur
+        });
+
+        if (!response.ok) {
+            throw new Error("Échec de la création de l'utilisateur.");
+        }
+
+        const data = await response.json();
+        return data; // Retourne les données de l'utilisateur créé
+    } catch (error) {
+        console.error("Erreur lors de l'inscription :", error);
+        throw error; // Relance l'erreur pour une gestion dans le composant React
+    }
+};
+
 // Fonction pour récupérer l'utilisateur connecté
 export const getUser = async (token) => {
     if (!token) {
@@ -54,6 +78,26 @@ export const getUser = async (token) => {
         return { error: "Une erreur s'est produite lors de la récupération de l'utilisateur." };
     }
 };
+
+export const deleteUser = async (id) => {
+    const token = isAuthenticated();
+    try {
+        const response = await fetch(`${API_URL}/users/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export const isAuthenticated = () => {
+    return localStorage.getItem("token");
+}
 
 // Fonction pour se déconnecter (logout)
 export const logout = () => {
