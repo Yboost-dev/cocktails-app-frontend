@@ -23,7 +23,7 @@ const Tableau = ({onSuccess, onError}) => {
             .then((data) => setUsers(data))
             .catch((error) => console.error("Une erreur est survenue, oupsi.. :", error));
     }, []);
-    
+
     const handleDelete = (id) => {
         setUserToDelete(id); // Stocke l'identifiant de l'utilisateur à supprimer
         setShowDeletePopup(true); // Ouvre la pop-up de confirmation
