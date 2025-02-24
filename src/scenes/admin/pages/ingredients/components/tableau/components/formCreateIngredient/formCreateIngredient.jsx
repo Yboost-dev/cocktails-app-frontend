@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './formCreateIngredient.scss'
 
 const FormCreateIngredient = ({ onClose, onSave }) => {
     const [formData, setFormData] = useState({

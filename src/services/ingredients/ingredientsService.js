@@ -35,3 +35,20 @@ export const createIngredient = async (ingredient) => {
         throw error;
     }
 }
+
+export const deleteIngredient = async (id) => {
+    const token = localStorage.getItem("token");
+    try {
+        const response = await fetch(`${API_BASE_URL}/ingredients/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
