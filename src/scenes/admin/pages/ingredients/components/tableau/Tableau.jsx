@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {getAllIngredients} from "services/ingredients/ingredientsService";
-import {Link} from "react-router-dom";
-import {FaEdit, FaTrash} from "react-icons/fa";
-import FormCreateUser from "../../../accounts/components/tableau/components/formCreateUser/formCreateUser";
+import {getAllIngredients, deleteIngredient} from "services/ingredients/ingredientsService";
 import FormCreateIngredient from "./components/formCreateIngredient/formCreateIngredient";
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import {createIngredient} from "../../../../../../services/ingredients/ingredientsService";
+import { X, Pencil } from 'lucide-react';
+import PopupDelete from "./components/popupDelete/popupDelete";
 
 const Tableau = () => {
     const [ingredients, setIngredients] = useState([]);
-    const [showDeletePopup, setShowDeletePopup] = useState(false); // Gestion de la pop-up de suppression
     const [showModal, setShowModal] = useState(false);
+    const [showDeletePopup, setShowDeletePopup] = useState(false); // Gestion de la pop-up de suppression
     const [loading, setLoading] = useState(false); // État de chargement
+    const [ingredientToDelete, setIngredientToDelete] = useState(null); // Stocke l'utilisateur à supprimer
 
     useEffect(() => {
         getAllIngredients()
@@ -34,7 +34,7 @@ const Tableau = () => {
             setIngredients((prevIngredients) => [...prevIngredients, newUser]);
 
             // Afficher un toast de succès
-            toast.success("Utilisateur créé avec succès !");
+            toast.success("Ingrédient créé avec succès !");
         } catch (error) {
             // Afficher un toast d'erreur
             toast.error(`Erreur : ${error.message}`);
@@ -49,8 +49,31 @@ const Tableau = () => {
     };
 
     const handleDelete = (id) => {
-        console.log(`Supprimer l'utilisateur : ${id}`);
-        // Ajoutez la logique de la suppression ici
+        setIngredientToDelete(id); // Stocke l'identifiant de l'utilisateur à supprimer
+        setShowDeletePopup(true); // Ouvre la pop-up de confirmation
+    };
+    
+    const confirmDelete = async (id) => {
+        try {
+            setLoading(true);
+
+            // Appelle l'API pour supprimer l'utilisateur
+            await deleteIngredient(id);
+
+            // Affiche un toast de succès
+            toast.success("Ingrédient supprimé avec succès !");
+
+            // Rafraîchit uniquement la liste des utilisateurs
+            const updatedIngredients = await getAllIngredients();
+            setIngredients(updatedIngredients);
+        } catch (error) {
+            // Affiche un toast en cas d'erreur
+            toast.error(`Erreur lors de la suppression : ${error.message}`);
+        } finally {
+            setLoading(false);
+            setShowDeletePopup(false); // Ferme la pop-up
+            setIngredientToDelete(null); // Réinitialise l'utilisateur ciblé
+        }
     };
 
     return (
@@ -79,8 +102,8 @@ const Tableau = () => {
                         <td>{ingredient.quantity}</td>
                         <td>{ingredient.unit}</td>
                         <td>
-                            <button onClick={() => handleEdit(ingredient.id)} className="edit-btn"><FaEdit/></button>
-                            <button onClick={() => handleDelete(ingredient.id)} className="delete-btn"><FaTrash/></button>
+                            <button onClick={() => handleEdit(ingredient.id)} className="edit-btn"><Pencil/></button>
+                            <button onClick={() => handleDelete(ingredient.id)} className="delete-btn"><X/></button>
                         </td>
                     </tr>
                 ))}
@@ -94,6 +117,23 @@ const Tableau = () => {
                     />
                 </div>
             )}
+            {showDeletePopup && (
+                <PopupDelete
+                    onClose={() => setShowDeletePopup(false)} // Ferme la pop-up
+                    onConfirm={() => confirmDelete(ingredientToDelete)} // Supprime l'utilisateur confirmé
+                />
+            )}
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={true}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 };
