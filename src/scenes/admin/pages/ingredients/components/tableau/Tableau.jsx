@@ -52,7 +52,7 @@ const Tableau = () => {
         setIngredientToDelete(id); // Stocke l'identifiant de l'utilisateur à supprimer
         setShowDeletePopup(true); // Ouvre la pop-up de confirmation
     };
-    
+
     const confirmDelete = async (id) => {
         try {
             setLoading(true);
