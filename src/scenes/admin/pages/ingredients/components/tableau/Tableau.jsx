@@ -2,9 +2,16 @@ import React, {useEffect, useState} from 'react';
 import {getAllIngredients} from "services/ingredients/ingredientsService";
 import {Link} from "react-router-dom";
 import {FaEdit, FaTrash} from "react-icons/fa";
+import FormCreateUser from "../../../accounts/components/tableau/components/formCreateUser/formCreateUser";
+import FormCreateIngredient from "./components/formCreateIngredient/formCreateIngredient";
+import {toast} from "react-toastify";
+import {createIngredient} from "../../../../../../services/ingredients/ingredientsService";
 
 const Tableau = () => {
     const [ingredients, setIngredients] = useState([]);
+    const [showDeletePopup, setShowDeletePopup] = useState(false); // Gestion de la pop-up de suppression
+    const [showModal, setShowModal] = useState(false);
+    const [loading, setLoading] = useState(false); // État de chargement
 
     useEffect(() => {
         getAllIngredients()
@@ -15,6 +22,26 @@ const Tableau = () => {
                 console.error("Une erreur est survenue :", error);
             });
     }, []);
+
+    const handleSave = async (ingredient) => {
+        try {
+            setLoading(true); // Active l'état de chargement
+
+            // Appelle la fonction `register` pour créer l'utilisateur
+            const newUser = await createIngredient(ingredient);
+
+            // Met à jour l'état local des utilisateurs pour afficher le nouvel utilisateur
+            setIngredients((prevIngredients) => [...prevIngredients, newUser]);
+
+            // Afficher un toast de succès
+            toast.success("Utilisateur créé avec succès !");
+        } catch (error) {
+            // Afficher un toast d'erreur
+            toast.error(`Erreur : ${error.message}`);
+        } finally {
+            setLoading(false); // Désactive l'état de chargement
+        }
+    };
 
     const handleEdit = (id) => {
         console.log(`Modifier l'utilisateur : ${id}`);
@@ -30,9 +57,9 @@ const Tableau = () => {
         <div className="tableau">
             <div className="tableau-header">
                 <h3>Tableau des ingrédients</h3>
-                <Link to="/admin/ingredient/add" className="btn-admin-link">
-                    Ajouter un ingrédients
-                </Link>
+                <button onClick={() => setShowModal(true)} className="btn-admin">
+                    Ajouter un ingrédient
+                </button>
             </div>
             <table>
                 <thead>
@@ -59,6 +86,14 @@ const Tableau = () => {
                 ))}
                 </tbody>
             </table>
+            {showModal && (
+                <div className="modal">
+                    <FormCreateIngredient
+                        onClose={() => setShowModal(false)} // Ferme la pop-up
+                        onSave={handleSave} // Fonction pour gérer la sauvegarde
+                    />
+                </div>
+            )}
         </div>
     );
 };

@@ -16,3 +16,22 @@ export const getAllIngredients = async () => {
         throw error;
     }
 }
+
+export const createIngredient = async (ingredient) => {
+    const token = localStorage.getItem("token");
+    console.log(ingredient);
+    try {
+        const response = await fetch(`${API_BASE_URL}/ingredients`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(ingredient)
+        })
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
