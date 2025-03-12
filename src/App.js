@@ -9,8 +9,8 @@ import Dashboard from "scenes/admin/pages/dashboard/Dashboard";
 import Orders from "scenes/admin/pages/orders/Orders";
 import Accounts from "scenes/admin/pages/accounts/Accounts";
 import Articles from "scenes/admin/pages/articles/Articles";
-import Category from "scenes/admin/pages/category/Category";
 import Ingredients from "scenes/admin/pages/ingredients/Ingredients";
+import Category from "scenes/category/Category";
 import NotFound from "scenes/notFound/NotFound";
 
 const App = () => {
@@ -24,14 +24,14 @@ const App = () => {
                 <Route path="/admin/auth/login" element={<Login/>}/>
 
                 {/* Routes catégories */}
-                <Route path="/cocktails" element={<Home/>}/>
-                <Route path="/mocktails" element={<Home/>}/>
-                <Route path="/indemodables" element={<Home/>}/>
-                <Route path="/spiritueux" element={<Home/>}/>
-                <Route path="/softs" element={<Home/>}/>
-                <Route path="/shooters" element={<Home/>}/>
-                <Route path="/long-drink" element={<Home/>}/>
-                <Route path="/short-drink" element={<Home/>}/>
+                <Route path="/cocktails" element={<Category/>}/>
+                <Route path="/mocktails" element={<Category/>}/>
+                <Route path="/indemodables" element={<Category/>}/>
+                <Route path="/spiritueux" element={<Category/>}/>
+                <Route path="/softs" element={<Category/>}/>
+                <Route path="/shooters" element={<Category/>}/>
+                <Route path="/long-drink" element={<Category/>}/>
+                <Route path="/short-drink" element={<Category/>}/>
 
                 {/* Routes private */}
                 <Route element={<PrivateRoute/>}>
