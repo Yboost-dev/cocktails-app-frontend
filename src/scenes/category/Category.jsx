@@ -1,7 +1,7 @@
-import Header from "../../components/header/Header";
+import Header from "components/header/Header";
 import { useEffect, useState } from "react";
-import { getCategory } from "../../services/articles/articlesService";
-import { useLocation, useParams } from "react-router-dom";
+import { getCategory } from "services/articles/articlesService";
+import { useParams } from "react-router-dom";
 
 const Category = () => {
     const [categoryData, setCategoryData] = useState(null);
@@ -12,7 +12,6 @@ const Category = () => {
             getCategory(category)
                 .then((data) => {
                     setCategoryData(data);
-                    console.log("Données de la catégorie :", data);
                 })
                 .catch((error) => {
                     console.error("Erreur lors de la récupération de la catégorie :", error);

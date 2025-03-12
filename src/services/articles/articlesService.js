@@ -20,7 +20,6 @@ export const getAllArticles = async () => {
 }
 
 export const getCategory = async(category) => {
-    console.log(category);
     try {
         const response = await fetch(`${API_BASE_URL}/category/${category}`, {
             method: "GET",
