@@ -3,7 +3,7 @@ import NavBar from "../components/navBar/NavBar";
 import Header from "../components/header/Header";
 import Tableau from "./components/tableau/Tableau";
 
-const Category = () => {
+const AdminCategory = () => {
     return (
         <div className="dashboard-global">
             <NavBar/>
@@ -18,4 +18,4 @@ const Category = () => {
     );
 };
 
-export default Category;
+export default AdminCategory;

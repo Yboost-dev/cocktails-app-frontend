@@ -4,7 +4,7 @@ import Header from "../components/header/Header";
 import Tableau from "./components/tableau/Tableau";
 
 
-const Accounts = () => {
+const AdminAccounts = () => {
     return (
         <div className="dashboard-global">
             <NavBar/>
@@ -21,4 +21,4 @@ const Accounts = () => {
     );
 };
 
-export default Accounts;
+export default AdminAccounts;

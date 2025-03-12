@@ -1,7 +1,9 @@
 import Header from "../../components/header/Header";
 import { useEffect, useState } from "react";
 import { getCategory } from "../../services/articles/articlesService";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import Error from "./components/error/Error";
+import Card from "./components/cards/Card";
 
 const Category = () => {
     const [categoryData, setCategoryData] = useState(null);
@@ -12,10 +14,10 @@ const Category = () => {
             getCategory(category)
                 .then((data) => {
                     setCategoryData(data);
-                    console.log("Données de la catégorie :", data);
+                    console.log("Données de la catégorie :", data);
                 })
                 .catch((error) => {
-                    console.error("Erreur lors de la récupération de la catégorie :", error);
+                    console.error("Erreur lors de la récupération de la catégorie :", error);
                 });
         }
     }, [category]);
@@ -28,16 +30,17 @@ const Category = () => {
         <div>
             <Header />
             <h1>{categoryData.name}</h1>
-            <h2>Articles :</h2>
-            <ul>
-                {categoryData.articles.map((article) => (
-                    <li key={article.id}>
-                        <h3>{article.title}</h3>
-                        <p>{article.description}</p>
-                        <p>Prix : {article.price}</p>
-                    </li>
-                ))}
-            </ul>
+            <h2>Articles :</h2>
+            {/* Rendu conditionnel si aucun article n'est présent */}
+            {categoryData.articles.length === 0 ? (
+                <Error cat = {categoryData.name}/>
+            ) : (
+                <ul>
+                    {categoryData.articles.map((article) => (
+                        <Card id={article.id} title={article.title} description={article.description} imagePath={article.imagePath}/>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 };

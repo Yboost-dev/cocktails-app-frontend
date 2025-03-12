@@ -3,7 +3,7 @@ import NavBar from "../components/navBar/NavBar";
 import Header from "../components/header/Header";
 import Tableau from "./components/tableau/Tableau";
 
-const Orders = () => {
+const AdminOrders = () => {
     return (
         <div className="dashboard-global">
             <NavBar/>
@@ -18,4 +18,4 @@ const Orders = () => {
     );
 };
 
-export default Orders;
+export default AdminOrders;

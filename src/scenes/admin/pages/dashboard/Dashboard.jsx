@@ -1,7 +1,7 @@
 import React from "react";
 import NavBar from "../components/navBar/NavBar";
 
-const Dashboard = () => {
+const AdminDashboard = () => {
 
     return (
         <div className="dashboard-global">
@@ -12,4 +12,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default AdminDashboard;
