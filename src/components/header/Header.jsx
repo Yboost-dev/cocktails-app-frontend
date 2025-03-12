@@ -11,9 +11,9 @@ const Header = () => {
             </div>
             <div className="header-elements">
                 <Element href="/" text="Accueil"/>
-                <Element href="/cocktails" text="Les cocktails"/>
-                <Element href="/softs" text="Un peu de soft"/>
-                <Element href="/shooters" text="Les shooters"/>
+                <Element href="/cocktail" text="Les cocktails"/>
+                <Element href="/soft" text="Un peu de soft"/>
+                <Element href="/shooter" text="Les shooters"/>
             </div>
             <div className="header-search">
                 <Search/>

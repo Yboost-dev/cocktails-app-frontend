@@ -24,14 +24,7 @@ const App = () => {
                 <Route path="/admin/auth/login" element={<Login/>}/>
 
                 {/* Routes catégories */}
-                <Route path="/cocktails" element={<Category/>}/>
-                <Route path="/mocktails" element={<Category/>}/>
-                <Route path="/indemodables" element={<Category/>}/>
-                <Route path="/spiritueux" element={<Category/>}/>
-                <Route path="/softs" element={<Category/>}/>
-                <Route path="/shooters" element={<Category/>}/>
-                <Route path="/long-drink" element={<Category/>}/>
-                <Route path="/short-drink" element={<Category/>}/>
+                <Route path=":category" element={<Category/>}/>
 
                 {/* Routes private */}
                 <Route element={<PrivateRoute/>}>
