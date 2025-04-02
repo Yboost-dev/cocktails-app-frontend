@@ -17,20 +17,18 @@ const Card = ({ id, title, description, price, imagePath, ingredients }) => {
                                 e.target.src = '/img/placeholder.png';
                             }}
                         />
-                        {price !== undefined && (
-                            <div className="card-price">{price.toFixed(2)} €</div>
-                        )}
                     </div>
                     <div className="card-content">
-                        <h2 className="card-title">{title}</h2>
-                        <p className="card-description">{description}</p>
-
-                        <div className="card-footer">
-                            <span className="view-more">Ajouter au panier</span>
-                        </div>
+                        <span className="card-title">{title}</span>
+                        {price !== undefined && (
+                            <span className="card-price">{price.toFixed(2)} €</span>
+                        )}
                     </div>
                 </div>
             </Link>
+            <button className="card-button">
+                Ajouter au panier
+            </button>
         </li>
     );
 };
