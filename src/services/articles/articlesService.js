@@ -11,6 +11,7 @@ export const getAllArticles = async () => {
                 "Authorization": `Bearer ${token}`
             },
         });
+        console.log(response.json());
         return await response.json();
     } catch (error) {
         console.error(error);
@@ -26,10 +27,9 @@ export const getArticleById = async (id) => {
                 "Content-Type": "application/json"
             },
         });
-        // Vérifiez le statut de la réponse avant de parser les données
         if (!response.ok) {
-            const errorData = await response.json(); // Parse l'erreur renvoyée par le serveur
-            throw new Error(JSON.stringify(errorData)); // Lancer une erreur avec les détails de la réponse
+            const errorData = await response.json();
+            throw new Error(JSON.stringify(errorData));
         }
         return await response.json();
     } catch (error) {

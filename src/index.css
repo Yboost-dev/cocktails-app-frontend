@@ -16,6 +16,7 @@ code {
 
 :root {
   --primary: #BC90F7;
+  --primary-hover: #9966CC;
   --secondary: #FFB100;
 
   --text: #121212;

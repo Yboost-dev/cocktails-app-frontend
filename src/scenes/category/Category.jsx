@@ -4,16 +4,20 @@ import { getCategory } from "../../services/articles/articlesService";
 import { useParams } from "react-router-dom";
 import Error from "./components/error/Error";
 import Card from "./components/cards/Card";
+import "./Category.scss";
 
 const Category = () => {
     const [categoryData, setCategoryData] = useState(null);
     const { category } = useParams();
+    const [sortOption, setSortOption] = useState("default");
+    const [sortedArticles, setSortedArticles] = useState([]);
 
     useEffect(() => {
         if (category) {
             getCategory(category)
                 .then((data) => {
                     setCategoryData(data);
+                    setSortedArticles(data.articles);
                     console.log("Données de la catégorie :", data);
                 })
                 .catch((error) => {
@@ -22,6 +26,38 @@ const Category = () => {
         }
     }, [category]);
 
+    useEffect(() => {
+        if (categoryData) {
+            let articles = [...categoryData.articles];
+
+            switch (sortOption) {
+                case "title_asc":
+                    articles.sort((a, b) => a.title.localeCompare(b.title));
+                    break;
+                case "title_desc":
+                    articles.sort((a, b) => b.title.localeCompare(a.title));
+                    break;
+                case "recent":
+                    // Supposant que nous avons un champ date dans les articles
+                    articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    break;
+                case "oldest":
+                    // Supposant que nous avons un champ date dans les articles
+                    articles.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    break;
+                default:
+                    // Pas de tri spécifique
+                    break;
+            }
+
+            setSortedArticles(articles);
+        }
+    }, [sortOption, categoryData]);
+
+    const handleSortChange = (e) => {
+        setSortOption(e.target.value);
+    };
+
     if (!categoryData) {
         return <div>Chargement...</div>;
     }
@@ -29,18 +65,42 @@ const Category = () => {
     return (
         <div>
             <Header />
-            <h1>{categoryData.name}</h1>
-            <h2>Articles :</h2>
-            {/* Rendu conditionnel si aucun article n'est présent */}
-            {categoryData.articles.length === 0 ? (
-                <Error cat = {categoryData.name}/>
-            ) : (
-                <ul>
-                    {categoryData.articles.map((article) => (
-                        <Card id={article.id} title={article.title} description={article.description} imagePath={article.imagePath}/>
-                    ))}
-                </ul>
-            )}
+            <section className="category-container">
+                <div className="category-header">
+                    <span>Résultats de recherche :</span>
+                    <span>{categoryData.name}</span>
+                </div>
+                <div className="category-body">
+                    <div className="category-filters">
+                        <select value={sortOption} onChange={handleSortChange} className="sort-select">
+                            <option value="default">Trier par</option>
+                            <option value="title_asc">Titre (A-Z)</option>
+                            <option value="title_desc">Titre (Z-A)</option>
+                            <option value="recent">Plus récent</option>
+                            <option value="oldest">Plus ancien</option>
+                        </select>
+                    </div>
+                    <div className="category-content">
+                        {sortedArticles.length === 0 ? (
+                            <Error cat={categoryData.name}/>
+                        ) : (
+                            <ul>
+                                {sortedArticles.map((article) => (
+                                    <Card
+                                        key={article.id}
+                                        id={article.id}
+                                        title={article.title}
+                                        description={article.description}
+                                        imagePath={article.imagePath}
+                                        price={article.price}
+                                        ingredients={article.ingredients}
+                                    />
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                </div>
+            </section>
         </div>
     );
 };
