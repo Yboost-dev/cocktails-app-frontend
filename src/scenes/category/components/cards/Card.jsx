@@ -1,13 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Card.scss';
-import { useCart } from '../../../../context/cartContext'; // Importer le hook du contexte
+import { useCart } from '../../../../context/cartContext';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const Card = ({ id, title, price, imagePath }) => {
-    const { addToCart } = useCart(); // Accéder à addToCart depuis le contexte
+    const { addToCart } = useCart();
 
     const handleAddToCart = () => {
-        const item = { id, title, price }; // Structure de l'article
+        const item = { id, title, price };
         addToCart(item);
     };
 
@@ -17,13 +19,9 @@ const Card = ({ id, title, price, imagePath }) => {
                 <div className="card">
                     <div className="card-image-container">
                         <img
-                            src={`/images/${imagePath}`}
+                            src={`${API_BASE_URL}${imagePath}`}
                             alt={title}
                             className="card-image"
-                            onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = '/img/placeholder.png';
-                            }}
                         />
                     </div>
                     <div className="card-content">

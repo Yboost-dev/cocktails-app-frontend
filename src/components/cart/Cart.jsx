@@ -3,12 +3,11 @@ import './Cart.scss';
 import { useCart } from '../../context/cartContext'; // Importer le hook du contexte
 
 const Cart = () => {
-    const { cartItems, removeFromCart, clearCart } = useCart(); // Récupérer l'état et les fonctions via le hook
+    const { cartItems, removeFromCart } = useCart();
 
-    const [isCartVisible, setIsCartVisible] = useState(false); // Gestion de la visibilité du panier
-    const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0); // Calcul du total des articles
+    const [isCartVisible, setIsCartVisible] = useState(false);
+    const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
 
-    // Fonction pour toggle (montrer/masquer) le panier
     const toggleCartVisibility = () => {
         setIsCartVisible((prevState) => !prevState);
     };
@@ -16,26 +15,29 @@ const Cart = () => {
     return (
         <div>
             <button className="cart-button" onClick={toggleCartVisibility}>
-                <i className="fa fa-cart-shopping"></i> ({totalItems})
+                <i className="fa fa-cart-shopping"></i>
+                {totalItems > 0 && (
+                    <span className="cart-badge">{totalItems}</span>
+                )}
             </button>
 
-            {/* Overlay (arrière-plan semi-transparent) */}
             <div
                 className={`cart-overlay ${isCartVisible ? 'cart-overlay-visible' : ''}`}
-                onClick={toggleCartVisibility} // Cliquer sur l'overlay pour fermer le panier
+                onClick={toggleCartVisibility}
             ></div>
 
             <div className={
                 `${isCartVisible ? 'cart-visible' : 'cart-hidden'}`
             }>
-                {/* Bouton pour fermer le panier */}
                 <button className="cart-close-button" onClick={toggleCartVisibility}>
-                    &times;
+                    <i className="fa fa-close"></i>
                 </button>
                 {cartItems.length === 0 ? (
-                    <p>Votre panier est vide.</p>
+                    <div className="empty-cart">
+                        <p>Votre panier est vide.</p>
+                    </div>
                 ) : (
-                    <>
+                    <div className="cart-items">
                         <ul>
                             {cartItems.map((item) => (
                                 <li key={item.id}>
@@ -49,10 +51,20 @@ const Cart = () => {
                                 </li>
                             ))}
                         </ul>
-                        <button className="clear-button" onClick={clearCart}>
-                            Vider le panier
-                        </button>
-                    </>
+                        <div className="cart-footer">
+                            <div>
+                                sous total
+                            </div>
+                            <div>
+                                <button>
+                                    voir le panier
+                                </button>
+                                <button>
+                                    Commander
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 )}
             </div>
         </div>
