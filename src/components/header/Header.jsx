@@ -2,6 +2,7 @@ import React from 'react';
 import './Header.scss';
 import Element from "./components/elements/Element";
 import Search from "./components/search/Search";
+import Cart from "../cart/Cart";
 
 const Header = () => {
     return (
@@ -17,6 +18,7 @@ const Header = () => {
             </div>
             <div className="header-search">
                 <Search/>
+                <Cart/>
             </div>
         </header>
     );
