@@ -6,6 +6,13 @@
   margin-top: 35px;
 }
 
+.order-id {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
 .orders-header {
   display: flex;
   justify-content: space-between;
@@ -172,6 +179,21 @@
     color: var(--red);
   }
 }
+
+.payment-icon {
+  &.paid {
+    color: var(--green);
+  }
+
+  &.unpaid {
+    color: var(--red);
+  }
+
+  &.canceled {
+    color: var(--red);
+  }
+}
+
 
 .action-buttons {
   display: flex;
