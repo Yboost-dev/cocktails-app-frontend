@@ -1,77 +1,33 @@
-.cart-visible {
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  width: 400px;
-  background-color: var(--surface);
-  z-index: 100;
-  transition: transform 0.3s ease-in-out;
-  transform: translateX(0);
-}
-
-.cart-hidden {
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  width: 400px;
-  background-color: var(--surface);
-  z-index: 100;
-  transition: transform 0.3s ease-in-out;
-  transform: translateX(100%);
+.cart-container {
+  position: relative;
 }
 
 .cart-button {
   position: relative;
-  color: var(--text);
-  display: flex;
   background: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
   border: none;
-  border-radius: 50px;
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  gap: 8px;
-  outline: none;
+  font-size: 1.5rem;
+  color: #333;
 
   &:hover {
-    color: var(--primary-hover);
-  }
-
-  .cart-badge {
-    position: absolute;
-    top: -10px;
-    right: -5px;
-    background-color: var(--primary);
-    color: var(--surface);
-    border-radius: 50%;
-    font-size: 12px;
-    padding: 2px 5px;
+    color: #666;
   }
 }
 
-.cart-close-button {
-  background-color: transparent;
-  color: var(--text);
-  font-size: 20px;
-  border: none;
-  cursor: pointer;
+.cart-badge {
   position: absolute;
-  top: 10px;
-  right: 15px;
-  transition: color 0.3s ease-in-out;
-
-  &:hover {
-    color: #ff5f5f;
-  }
-
-  &:focus {
-    outline: none;
-  }
+  top: -8px;
+  right: -8px;
+  background-color: #ff6b6b;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cart-overlay {
@@ -81,65 +37,212 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 99;
-  transition: opacity 0.3s ease-in-out;
+  z-index: 998;
   opacity: 0;
-  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+
+  &.cart-overlay-visible {
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
-.cart-overlay-visible {
-  opacity: 1;
-  pointer-events: auto;
+.cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100vh;
+  background-color: white;
+  z-index: 999;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+
+  &.cart-visible {
+    transform: translateX(0);
+  }
+
+  &.cart-hidden {
+    transform: translateX(100%);
+  }
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+
+  h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+}
+
+.cart-close-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #666;
+
+  &:hover {
+    color: #333;
+  }
 }
 
 .empty-cart {
-  text-align: center;
-  height: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
-  flex-direction: column;
-  color: var(--grey);
+  align-items: center;
+  height: 200px;
+
+  p {
+    color: #999;
+    font-size: 1rem;
+  }
 }
 
-.cart-items {
-  height: 100%;
+.cart-content {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  justify-content: space-between;
-  margin: 15px;
-  padding: 15px;
+  height: 100%;
 
-  ul {
+  .cart-items-list {
     list-style: none;
     padding: 0;
     margin: 0;
-    flex-grow: 1;
     overflow-y: auto;
+    flex-grow: 1;
   }
 
-  .cart-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: var(--surface);
-    padding: 15px;
-    .clear-button {
-      width: 100%;
-      color: var(--text);
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-      text-transform: uppercase;
-      padding: 15px;
-      border-top: 1px solid var(--light-grey);
-      transition: color 0.3s ease;
+  .cart-item {
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
 
-      &:hover {
-        color: var(--red); /* Couleur de survol */
+    .cart-item-info {
+      flex: 1;
+
+      .cart-item-title {
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+
+      .cart-item-price {
+        color: #666;
+        font-size: 0.9rem;
+      }
+    }
+
+    .cart-item-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .quantity-btn {
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid #ddd;
+          background: white;
+          border-radius: 4px;
+          cursor: pointer;
+
+          &:hover {
+            background: #f5f5f5;
+          }
+
+          &.decrease {
+            color: #ff6b6b;
+          }
+
+          &.increase {
+            color: #4CAF50;
+          }
+        }
+
+        .quantity {
+          font-weight: 500;
+          min-width: 20px;
+          text-align: center;
+        }
+      }
+
+      .remove-button {
+        background: none;
+        border: none;
+        color: #ff6b6b;
+        cursor: pointer;
+
+        &:hover {
+          color: #ff5252;
+        }
+      }
+    }
+  }
+}
+
+.cart-footer {
+  margin-top: auto;
+  padding: 16px;
+  border-top: 1px solid #eee;
+
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    font-weight: 500;
+
+    .total-amount {
+      font-size: 1.1rem;
+    }
+  }
+
+  .cart-buttons {
+    display: flex;
+    gap: 8px;
+
+    .cart-button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      font-weight: 500;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
+
+      &.secondary {
+        background: #f5f5f5;
+        color: #333;
+
+        &:hover {
+          background: #eee;
+        }
+      }
+
+      &.primary {
+        background: #4CAF50;
+        color: white;
+
+        &:hover {
+          background: #43A047;
+        }
       }
     }
   }

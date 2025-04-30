@@ -8,6 +8,7 @@ import Login from "scenes/admin/auth/login/Login";
 import Category from "scenes/category/Category";
 import NotFound from "scenes/notFound/NotFound";
 import Articles from "scenes/article/Article";
+import CommandePreview from "scenes/commande/CommandePreview";
 
 import AdminDashboard from "scenes/admin/pages/dashboard/Dashboard";
 import AdminOrders from "scenes/admin/pages/orders/Orders";
@@ -30,7 +31,10 @@ const App = () => {
                 <Route path=":category" element={<Category/>}/>
                 <Route path="/article/:id" element={<Articles/>}/>
 
-                {/* Routes private */}
+                {/* Routes la visualisation de la commande */}
+                <Route path="/commande-preview" element={<CommandePreview/>}/>
+
+                {/* Routes privée */}
                 <Route element={<PrivateRoute/>}>
                     <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
                     <Route path="/admin/orders" element={<AdminOrders/>}/>

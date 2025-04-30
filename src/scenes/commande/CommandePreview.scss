@@ -1,0 +1,514 @@
+// CommandePreview.scss
+.commande-preview {
+  min-height: calc(100vh - 80px);
+  padding: 40px 20px;
+  background-color: #f8f9fb;
+  background-image: linear-gradient(135deg, #f8f9fb 0%, #f2f4f8 100%);
+
+  .commande-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+
+    @media (max-width: 992px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .commande-section, .payment-section {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    padding: 30px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-top: 0;
+      margin-bottom: 25px;
+      color: var(--text);
+      position: relative;
+      padding-bottom: 15px;
+
+      &:after {
+        content: '';
+        position: absolute;
+        width: 60px;
+        height: 3px;
+        background: var(--primary);
+        bottom: 0;
+        left: 0;
+        border-radius: 2px;
+      }
+    }
+
+    h3 {
+      font-size: 18px;
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+  }
+
+  .client-info {
+    margin-bottom: 30px;
+
+    .form-group {
+      margin-bottom: 20px;
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-secondary);
+      }
+
+      input {
+        padding: 12px 15px;
+        border: 1px solid var(--divider);
+        border-radius: 10px;
+        font-size: 16px;
+        transition: all 0.2s ease;
+
+        &:focus {
+          outline: none;
+          border-color: var(--primary);
+          box-shadow: 0 0 0 3px rgba(188, 144, 247, 0.2);
+        }
+
+        &::placeholder {
+          color: #c5c5c5;
+        }
+      }
+    }
+  }
+
+  .cart-items-preview {
+    background-color: #fbfbfd;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 10px;
+
+    .cart-items-list {
+      padding: 0;
+      margin: 0 0 20px 0;
+      list-style: none;
+      max-height: 300px;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 5px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #d0d0d0;
+        border-radius: 10px;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: #c0c0c0;
+      }
+
+      .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #eef1f6;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .item-details {
+          display: flex;
+          flex-direction: column;
+
+          .item-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: var(--text);
+          }
+
+          .item-quantity {
+            font-size: 14px;
+            color: var(--text-secondary);
+            padding: 3px 8px;
+            border-radius: 12px;
+            display: inline-block;
+          }
+        }
+
+        .item-price {
+          font-weight: 600;
+          color: var(--text);
+        }
+      }
+    }
+
+    .cart-totals {
+      margin-top: 25px;
+      border-top: 1px dashed #e0e0e0;
+      padding-top: 20px;
+
+      .total-line {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        color: var(--text-secondary);
+
+        &.total-final {
+          font-weight: 600;
+          font-size: 18px;
+          margin-top: 20px;
+          padding-top: 15px;
+          border-top: 1px solid var(--divider);
+          color: var(--text);
+        }
+      }
+    }
+  }
+
+  .payment-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 500px;
+
+    .payment-methods {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+
+      .payment-method {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        border: 2px solid var(--divider);
+        border-radius: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          border-color: var(--primary-hover);
+          background-color: rgba(188, 144, 247, 0.03);
+        }
+
+        &.active {
+          border-color: var(--primary);
+          background-color: rgba(188, 144, 247, 0.07);
+        }
+
+        .payment-icon {
+          font-size: 28px;
+          margin-bottom: 15px;
+          color: var(--primary);
+          background: rgba(188, 144, 247, 0.15);
+          width: 60px;
+          height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          transition: all 0.3s ease;
+        }
+
+        span {
+          font-weight: 500;
+          color: var(--text);
+        }
+
+        &:hover .payment-icon, &.active .payment-icon {
+          transform: scale(1.05);
+          background: rgba(188, 144, 247, 0.25);
+        }
+      }
+    }
+  }
+
+  .stripe-payment-container, .cash-payment-container {
+    margin-top: 25px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stripe-form {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+
+    .card-element-container {
+      border: 1px solid var(--divider);
+      border-radius: 12px;
+      padding: 20px;
+      background-color: #fff;
+      margin-bottom: 25px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+      }
+    }
+
+    .payment-error {
+      color: var(--red);
+      margin-bottom: 20px;
+      font-size: 14px;
+      background-color: rgba(220, 10, 10, 0.05);
+      padding: 10px 15px;
+      border-radius: 8px;
+      border-left: 3px solid var(--red);
+    }
+  }
+
+  .payment-button, .cash-payment-button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: auto;
+    box-shadow: 0 4px 15px rgba(188, 144, 247, 0.3);
+
+    &:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(188, 144, 247, 0.4);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(188, 144, 247, 0.2);
+    }
+
+    &:disabled {
+      background-color: #c5c5c5;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+  }
+
+  .cash-payment-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    p {
+      margin-bottom: 30px;
+      color: var(--text-secondary);
+      background-color: #f9f5ff;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 15px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .cash-payment-button {
+      margin-top: auto;
+    }
+  }
+}
+
+.order-success {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  background-color: #f8f9fb;
+
+  .success-container {
+    text-align: center;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    padding: 50px;
+    max-width: 550px;
+    width: 100%;
+    animation: fadeInUp 0.6s ease-out;
+
+    .success-icon {
+      font-size: 80px;
+      color: var(--green);
+      margin-bottom: 30px;
+      animation: pulse 2s infinite;
+
+      i {
+        display: inline-block;
+        animation: bounceIn 0.8s ease-out;
+        background: rgba(0, 153, 0, 0.1);
+        width: 120px;
+        height: 120px;
+        line-height: 120px;
+        border-radius: 50%;
+      }
+    }
+
+    h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    p {
+      margin-bottom: 40px;
+      color: var(--text-secondary);
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    .return-button {
+      padding: 15px 30px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(188, 144, 247, 0.3);
+
+      &:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(188, 144, 247, 0.4);
+      }
+
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(188, 144, 247, 0.2);
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Media queries pour la responsivité
+@media (max-width: 768px) {
+  .commande-preview {
+    padding: 20px 15px;
+
+    .commande-container {
+      gap: 20px;
+    }
+
+    .commande-section, .payment-section {
+      padding: 20px;
+    }
+
+    .success-container {
+      padding: 30px 20px;
+
+      .success-icon {
+        font-size: 60px;
+
+        i {
+          width: 100px;
+          height: 100px;
+          line-height: 100px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-methods {
+    flex-direction: column;
+
+    .payment-method {
+      flex-direction: row;
+      justify-content: flex-start;
+
+      .payment-icon {
+        margin-bottom: 0;
+        margin-right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+      }
+    }
+  }
+
+  .success-container {
+    .success-icon {
+      font-size: 50px;
+
+      i {
+        width: 80px;
+        height: 80px;
+        line-height: 80px;
+      }
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    p {
+      font-size: 15px;
+    }
+  }
+}

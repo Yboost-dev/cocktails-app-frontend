@@ -1,5 +1,3 @@
-// Fonction pour se connecter (login)
-
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const login = async (email, password) => {
