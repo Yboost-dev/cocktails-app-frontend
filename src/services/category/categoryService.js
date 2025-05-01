@@ -42,6 +42,29 @@ export const getCategoryById = async (id) => {
     }
 }
 
+export const getCategoryByName = async (name) => {
+    const token = localStorage.getItem("token");
+    try {
+        const response = await fetch(`${API_BASE_URL}/category/name/${name}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+        });
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(JSON.stringify(errorData));
+        }
+        const data = await response.json();
+        console.log("Catégorie récupérée:", data);
+        return data;
+    } catch (error) {
+        console.error("Erreur dans getCategoryByName:", error);
+        throw error;
+    }
+}
+
 // Fonction pour créer une catégorie
 export const createCategory = async (categoryData) => {
     const token = localStorage.getItem("token");
@@ -77,7 +100,7 @@ export const updateCategory = async (categoryData) => {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify({ name: categoryData.name })
+            body: JSON.stringify({ id: categoryData.id })
         });
 
         if (!response.ok) {

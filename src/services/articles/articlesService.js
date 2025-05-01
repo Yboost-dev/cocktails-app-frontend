@@ -50,7 +50,7 @@ export const getArticleById = async (id) => {
 
 export const getCategory = async (category) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/category/${category}`, {
+        const response = await fetch(`${API_BASE_URL}/category/name/${category}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
