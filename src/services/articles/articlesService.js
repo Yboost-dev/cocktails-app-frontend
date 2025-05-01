@@ -10,8 +10,11 @@ export const getAllArticles = async () => {
                 "Authorization": `Bearer ${token}`
             },
         });
-        console.log(response.json());
-        return await response.json();
+
+        // Ne lisez la réponse qu'une seule fois
+        const data = await response.json();
+        console.log(data); // Loguer les données après les avoir récupérées
+        return data;
     } catch (error) {
         console.error(error);
         throw error;
@@ -23,21 +26,29 @@ export const getArticleById = async (id) => {
         const response = await fetch(`${API_BASE_URL}/articles/${id}`, {
             method: "GET",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
             },
         });
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(JSON.stringify(errorData));
         }
-        return await response.json();
+        const data = await response.json();
+        console.log("Article récupéré (brut):", data);
+
+        // Si c'est un tableau, retourner le premier élément, sinon retourner les données telles quelles
+        const formattedData = Array.isArray(data) ? data[0] : data;
+        console.log("Article formaté:", formattedData);
+
+        return formattedData;
     } catch (error) {
-        console.error(error);
+        console.error("Erreur dans getArticleById:", error);
         throw error;
     }
 }
 
-export const getCategory = async(category) => {
+export const getCategory = async (category) => {
     try {
         const response = await fetch(`${API_BASE_URL}/category/${category}`, {
             method: "GET",
@@ -99,3 +110,47 @@ export const createArticle = async (articleData, file) => {
     }
 };
 
+export const updateArticle = async (articleData, file) => {
+    const token = localStorage.getItem("token");
+    try {
+        const formData = new FormData();
+        formData.append('imagePath', file);
+        formData.append('title', articleData.title);
+        formData.append('description', articleData.description);
+        formData.append('price', articleData.price.toString());
+        formData.append('categoryId', articleData.categoryId.toString());
+        formData.append('published', articleData.published.toString());
+        articleData.ingredients.forEach((ingredient, index) => {
+            formData.append(`ingredients[${index}][ingredientId]`, ingredient.ingredientId.toString());
+            formData.append(`ingredients[${index}][quantity]`, ingredient.quantity.toString());
+        });
+        const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3000'}/articles/${articleData.id}`, {
+            method: "PATCH",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+            body: formData
+        })
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export const deleteArticle = async (id) => {
+    const token = localStorage.getItem("token");
+    try {
+        const response = await fetch(`${API_BASE_URL}/articles/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}

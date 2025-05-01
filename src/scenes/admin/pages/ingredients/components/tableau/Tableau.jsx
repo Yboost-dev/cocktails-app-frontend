@@ -3,128 +3,229 @@ import {getAllIngredients, deleteIngredient} from "services/ingredients/ingredie
 import FormCreateIngredient from "./components/formCreateIngredient/formCreateIngredient";
 import {toast, ToastContainer} from "react-toastify";
 import {createIngredient} from "../../../../../../services/ingredients/ingredientsService";
-import { X, Pencil } from 'lucide-react';
+import { X, Pencil, Plus, AlertCircle, RefreshCw } from 'lucide-react';
 import PopupDelete from "./components/popupDelete/popupDelete";
+import './Tableau.scss';
 
-const Tableau = () => {
+const IngredientsTable = () => {
     const [ingredients, setIngredients] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [showDeletePopup, setShowDeletePopup] = useState(false); // Gestion de la pop-up de suppression
-    const [loading, setLoading] = useState(false); // État de chargement
-    const [ingredientToDelete, setIngredientToDelete] = useState(null); // Stocke l'utilisateur à supprimer
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [ingredientToDelete, setIngredientToDelete] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filter, setFilter] = useState('all');
 
     useEffect(() => {
-        getAllIngredients()
-            .then((data) => {
-                setIngredients(data);
-            })
-            .catch((error) => {
-                console.error("Une erreur est survenue :", error);
-            });
+        fetchIngredients();
     }, []);
+
+    const fetchIngredients = async () => {
+        try {
+            setLoading(true);
+            const data = await getAllIngredients();
+            setIngredients(data);
+            setLoading(false);
+        } catch (error) {
+            console.error("Erreur lors de la récupération des ingrédients:", error);
+            toast.error("Impossible de charger les ingrédients");
+            setLoading(false);
+        }
+    };
 
     const handleSave = async (ingredient) => {
         try {
-            setLoading(true); // Active l'état de chargement
-
-            // Appelle la fonction `register` pour créer l'utilisateur
-            const newUser = await createIngredient(ingredient);
-
-            // Met à jour l'état local des utilisateurs pour afficher le nouvel utilisateur
-            setIngredients((prevIngredients) => [...prevIngredients, newUser]);
-
-            // Afficher un toast de succès
-            toast.success("Ingrédient créé avec succès !");
+            setLoading(true);
+            const newIngredient = await createIngredient(ingredient);
+            setIngredients((prevIngredients) => [...prevIngredients, newIngredient]);
+            toast.success("Ingrédient ajouté avec succès !");
         } catch (error) {
-            // Afficher un toast d'erreur
             toast.error(`Erreur : ${error.message}`);
         } finally {
-            setLoading(false); // Désactive l'état de chargement
+            setLoading(false);
         }
     };
 
     const handleEdit = (id) => {
-        console.log(`Modifier l'utilisateur : ${id}`);
-        // Ajoutez la logique de l'édition ici
+        console.log(`Modifier l'ingrédient : ${id}`);
+        // Logique d'édition à implémenter
     };
 
     const handleDelete = (id) => {
-        setIngredientToDelete(id); // Stocke l'identifiant de l'utilisateur à supprimer
-        setShowDeletePopup(true); // Ouvre la pop-up de confirmation
+        setIngredientToDelete(id);
+        setShowDeletePopup(true);
     };
 
     const confirmDelete = async (id) => {
         try {
             setLoading(true);
-
-            // Appelle l'API pour supprimer l'utilisateur
             await deleteIngredient(id);
-
-            // Affiche un toast de succès
             toast.success("Ingrédient supprimé avec succès !");
-
-            // Rafraîchit uniquement la liste des utilisateurs
             const updatedIngredients = await getAllIngredients();
             setIngredients(updatedIngredients);
         } catch (error) {
-            // Affiche un toast en cas d'erreur
             toast.error(`Erreur lors de la suppression : ${error.message}`);
         } finally {
             setLoading(false);
-            setShowDeletePopup(false); // Ferme la pop-up
-            setIngredientToDelete(null); // Réinitialise l'utilisateur ciblé
+            setShowDeletePopup(false);
+            setIngredientToDelete(null);
         }
     };
 
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleFilterChange = (e) => {
+        setFilter(e.target.value);
+    };
+
+    const checkLowStock = (quantity) => {
+        return quantity < 100; // Exemple: stock faible si moins de 100 unités
+    };
+
+    // Filtrage des ingrédients
+    const filteredIngredients = ingredients.filter(ingredient => {
+        // Filtrer par recherche
+        if (searchTerm && !ingredient.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+            return false;
+        }
+
+        // Filtrer par niveau de stock
+        if (filter === 'low' && !checkLowStock(ingredient.quantity)) {
+            return false;
+        } else if (filter === 'normal' && checkLowStock(ingredient.quantity)) {
+            return false;
+        }
+
+        return true;
+    });
+
     return (
-        <div className="tableau">
-            <div className="tableau-header">
-                <h3>Tableau des ingrédients</h3>
-                <button onClick={() => setShowModal(true)} className="btn-admin">
-                    Ajouter un ingrédient
-                </button>
+        <div className="ingredients-dashboard">
+            <div className="ingredients-header">
+                <h1>Gestion des Ingrédients</h1>
+                <div className="ingredients-controls">
+                    <div className="search-container">
+                        <input
+                            type="text"
+                            placeholder="Rechercher un ingrédient..."
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className="search-input"
+                        />
+                    </div>
+                    <div className="filter-container">
+                        <select
+                            value={filter}
+                            onChange={handleFilterChange}
+                            className="filter-select"
+                        >
+                            <option value="all">Tous les ingrédients</option>
+                            <option value="low">Stock faible</option>
+                            <option value="normal">Stock normal</option>
+                        </select>
+                    </div>
+                    <button
+                        className="add-ingredient-button"
+                        onClick={() => setShowModal(true)}
+                    >
+                        <Plus size={18} /> Ajouter
+                    </button>
+                    <button
+                        className="refresh-button"
+                        onClick={fetchIngredients}
+                    >
+                        <RefreshCw size={18} /> Actualiser
+                    </button>
+                </div>
             </div>
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nom Produit</th>
-                    <th>Quantité</th>
-                    <th>Unité</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {ingredients.map((ingredient) => (
-                    <tr key={ingredient.id}>
-                        <td>{ingredient.id}</td>
-                        <td>{ingredient.name}</td>
-                        <td>{ingredient.quantity}</td>
-                        <td>{ingredient.unit}</td>
-                        <td>
-                            <button onClick={() => handleEdit(ingredient.id)} className="edit-btn"><Pencil/></button>
-                            <button onClick={() => handleDelete(ingredient.id)} className="delete-btn"><X/></button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+
+            {loading ? (
+                <div className="loading-container">
+                    <div className="spinner"></div>
+                    <p>Chargement des ingrédients...</p>
+                </div>
+            ) : (
+                <>
+                    {filteredIngredients.length === 0 ? (
+                        <div className="no-ingredients">
+                            <p>Aucun ingrédient ne correspond à vos critères.</p>
+                        </div>
+                    ) : (
+                        <div className="ingredients-table-container">
+                            <table className="ingredients-table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom de l'ingrédient</th>
+                                    <th>Quantité</th>
+                                    <th>Unité</th>
+                                    <th>Stock</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {filteredIngredients.map((ingredient) => (
+                                    <tr key={ingredient.id}>
+                                        <td>{ingredient.id}</td>
+                                        <td>{ingredient.name}</td>
+                                        <td>{ingredient.quantity}</td>
+                                        <td>{ingredient.unit}</td>
+                                        <td>
+                                            <div className={`stock-badge ${checkLowStock(ingredient.quantity) ? 'low-stock' : 'normal-stock'}`}>
+                                                {checkLowStock(ingredient.quantity) ?
+                                                    <><AlertCircle size={14} /> Faible</> :
+                                                    'Normal'}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="action-buttons">
+                                                <button
+                                                    className="edit-btn"
+                                                    title="Modifier l'ingrédient"
+                                                    onClick={() => handleEdit(ingredient.id)}
+                                                >
+                                                    <Pencil size={16} />
+                                                </button>
+                                                <button
+                                                    className="delete-btn"
+                                                    title="Supprimer l'ingrédient"
+                                                    onClick={() => handleDelete(ingredient.id)}
+                                                >
+                                                    <X size={16} />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </>
+            )}
+
             {showModal && (
-                <div className="modal">
+                <div className="ingredient-modal-overlay">
                     <FormCreateIngredient
-                        onClose={() => setShowModal(false)} // Ferme la pop-up
-                        onSave={handleSave} // Fonction pour gérer la sauvegarde
+                        onClose={() => setShowModal(false)}
+                        onSave={handleSave}
                     />
                 </div>
             )}
+
             {showDeletePopup && (
-                <PopupDelete
-                    onClose={() => setShowDeletePopup(false)} // Ferme la pop-up
-                    onConfirm={() => confirmDelete(ingredientToDelete)} // Supprime l'utilisateur confirmé
-                />
+                <div className="delete-modal-overlay">
+                    <PopupDelete
+                        onClose={() => setShowDeletePopup(false)}
+                        onConfirm={() => confirmDelete(ingredientToDelete)}
+                    />
+                </div>
             )}
+
             <ToastContainer
-                position="top-right"
+                position="bottom-right"
                 autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={true}
@@ -138,4 +239,4 @@ const Tableau = () => {
     );
 };
 
-export default Tableau;
+export default IngredientsTable;

@@ -1,13 +1,14 @@
-import React, {useState, useEffect} from "react";
-import {toast} from "react-toastify";
-import {Plus, Trash2, X} from "lucide-react";
-import {getAllCategory} from "../../../../../../services/category/categoryService";
-import {getAllIngredients} from "../../../../../../services/ingredients/ingredientsService";
-import "./CreateArticleForm.scss";
-import {createArticle} from "../../../../../../services/articles/articlesService";
+import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { Plus, Trash2, X } from "lucide-react";
+import { getAllCategory } from "../../../../../../services/category/categoryService";
+import { getAllIngredients } from "../../../../../../services/ingredients/ingredientsService";
+import { getArticleById, updateArticle } from "../../../../../../services/articles/articlesService";
+import "./CreateArticleForm.scss"; // Réutiliser le même CSS
 
-const CreateArticleForm = ({onClose, onSuccess}) => {
+const EditArticleForm = ({ articleId, onClose, onSuccess }) => {
     const [article, setArticle] = useState({
+        id: articleId,
         title: "",
         description: "",
         price: 0,
@@ -22,26 +23,67 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
     const [previewImage, setPreviewImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [initialLoading, setInitialLoading] = useState(true);
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchArticleData = async () => {
             try {
+                setInitialLoading(true);
+                const response = await getArticleById(articleId);
+
+                // Vérifier si la réponse est un tableau et extraire le premier élément si nécessaire
+                const articleData = Array.isArray(response) ? response[0] : response;
+
+                console.log("Données d'article formatées:", articleData);
+
                 const categoriesData = await getAllCategory();
                 const ingredientsData = await getAllIngredients();
 
+                if (!articleData || !articleData.ingredients) {
+                    throw new Error("Données d'article invalides ou manquantes");
+                }
+
+                // Préparer les ingrédients dans le bon format
+                const formattedIngredients = articleData.ingredients.map(ing => ({
+                    ingredientId: ing.ingredientId || ing.id,
+                    quantity: ing.quantity
+                }));
+
+                setArticle({
+                    id: articleData.id,
+                    title: articleData.title,
+                    description: articleData.description,
+                    price: articleData.price,
+                    categoryId: articleData.categoryId,
+                    published: articleData.published,
+                    ingredients: formattedIngredients
+                });
+
                 setCategories(categoriesData);
                 setIngredientsList(ingredientsData);
+
+                // Si l'article a une image, configurer l'aperçu
+                if (articleData.imagePath) {
+                    // Vérifiez si l'URL est déjà complète, sinon préfixez avec l'URL de base
+                    const imageUrl = articleData.imagePath.startsWith('http')
+                        ? articleData.imagePath
+                        : `${process.env.REACT_APP_API_URL}/uploads/${articleData.imagePath}`;
+                    setPreviewImage(imageUrl);
+                }
+
+                setInitialLoading(false);
             } catch (error) {
-                toast.error("Erreur lors du chargement des données");
+                toast.error("Erreur lors du chargement des données de l'article");
                 console.error("Erreur de chargement:", error);
+                setInitialLoading(false);
             }
         };
 
-        fetchData();
-    }, []);
+        fetchArticleData();
+    }, [articleId]);
 
     const handleChange = (e) => {
-        const {name, value, type, checked} = e.target;
+        const { name, value, type, checked } = e.target;
 
         if (name === "categoryId") {
             setArticle({
@@ -79,7 +121,7 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
             ...article,
             ingredients: [
                 ...article.ingredients,
-                {ingredientId: "", quantity: 1}
+                { ingredientId: "", quantity: 1 }
             ]
         });
     };
@@ -120,12 +162,6 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
             return;
         }
 
-        if (!selectedFile) {
-            toast.error("Veuillez sélectionner une image");
-            setLoading(false);
-            return;
-        }
-
         if (article.ingredients.length === 0) {
             toast.error("Ajoutez au moins un ingrédient");
             setLoading(false);
@@ -144,12 +180,12 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
 
         try {
             const preparedArticle = {
+                id: article.id,
                 title: article.title,
                 description: article.description,
                 price: parseFloat(article.price),
                 categoryId: parseInt(article.categoryId, 10),
                 published: article.published,
-                // S'assurer que les ingrédients sont au bon format
                 ingredients: article.ingredients.map(ing => ({
                     ingredientId: parseInt(ing.ingredientId, 10),
                     quantity: parseInt(ing.quantity, 10)
@@ -157,8 +193,8 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
             };
 
             console.log("Données à envoyer:", preparedArticle);
-            await createArticle(preparedArticle, selectedFile);
-            toast.success("Cocktail créé avec succès !");
+            await updateArticle(preparedArticle, selectedFile);
+            toast.success("Cocktail mis à jour avec succès !");
 
             // Notifier le composant parent du succès
             if (onSuccess) {
@@ -166,8 +202,8 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
             }
 
         } catch (error) {
-            console.error("Erreur lors de la création:", error);
-            let errorMessage = error.message || "Erreur lors de la création du cocktail";
+            console.error("Erreur lors de la mise à jour:", error);
+            let errorMessage = error.message || "Erreur lors de la mise à jour du cocktail";
             setError(errorMessage);
             toast.error(errorMessage);
         } finally {
@@ -175,12 +211,31 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
         }
     };
 
+    if (initialLoading) {
+        return (
+            <div className="article-modal">
+                <div className="article-modal-header">
+                    <h2>Modification du cocktail</h2>
+                    <button className="close-button" onClick={onClose}>
+                        <X size={24} />
+                    </button>
+                </div>
+                <div className="article-modal-content">
+                    <div className="loading-container">
+                        <div className="spinner"></div>
+                        <p>Chargement des données...</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="article-modal">
             <div className="article-modal-header">
-                <h2>Créer un nouveau cocktail</h2>
+                <h2>Modifier le cocktail</h2>
                 <button className="close-button" onClick={onClose}>
-                    <X size={24}/>
+                    <X size={24} />
                 </button>
             </div>
 
@@ -264,18 +319,18 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="fileInput">Image du cocktail *</label>
+                        <label htmlFor="fileInput">Image du cocktail {!previewImage && "*"}</label>
                         <input
                             type="file"
                             id="fileInput"
                             accept="image/*"
                             onChange={handleFileChange}
-                            required
+                            required={!previewImage}
                         />
 
                         {previewImage && (
                             <div className="image-preview">
-                                <img src={previewImage} alt="Aperçu du cocktail"/>
+                                <img src={previewImage} alt="Aperçu du cocktail" />
                             </div>
                         )}
                     </div>
@@ -288,7 +343,7 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
                                 className="add-button"
                                 onClick={addIngredient}
                             >
-                                <Plus size={18}/> Ajouter un ingrédient
+                                <Plus size={18} /> Ajouter un ingrédient
                             </button>
                         </div>
 
@@ -331,7 +386,7 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
                                             className="remove-button"
                                             onClick={() => removeIngredient(index)}
                                         >
-                                            <Trash2 size={18}/>
+                                            <Trash2 size={18} />
                                         </button>
                                     </div>
                                 ))}
@@ -354,7 +409,7 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
                             className="save-button"
                             disabled={loading}
                         >
-                            {loading ? "Création en cours..." : "Créer le cocktail"}
+                            {loading ? "Mise à jour en cours..." : "Mettre à jour le cocktail"}
                         </button>
                     </div>
                 </form>
@@ -363,4 +418,4 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
     );
 };
 
-export default CreateArticleForm;
+export default EditArticleForm;

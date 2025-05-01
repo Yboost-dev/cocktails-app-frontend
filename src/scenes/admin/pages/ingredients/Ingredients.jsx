@@ -1,7 +1,8 @@
 import React from "react";
 import NavBar from "../components/navBar/NavBar";
-import Tableau from "./components/tableau/Tableau";
+import IngredientsTable from "./components/tableau/Tableau";
 import Header from "../components/header/Header";
+import './Ingredients.scss';
 
 const AdminIngredients = () => {
     return (
@@ -10,8 +11,9 @@ const AdminIngredients = () => {
             <div className="dashboard-content">
                 <Header/>
                 <div className="dashboard-content-body">
-                    <p>Ingrédients</p>
-                    <Tableau/>
+                    <div>
+                        <IngredientsTable/>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,15 +1,20 @@
 import React from 'react';
+import './popupDelete.scss';
 
 const PopupDelete = ({ onClose, onConfirm }) => {
     return (
-        <div className="modal">
-            <div className="modal-content">
-                <h3>Confirmation</h3>
-                <p>Êtes-vous sûr de vouloir supprimer cet ingrédient ?</p>
-                <div className="modal-actions">
-                    <button onClick={onClose} className="btn-cancel">Annuler</button>
-                    <button onClick={onConfirm} className="btn-confirm">Confirmer</button>
-                </div>
+        <div className="delete-confirmation">
+            <h3>Confirmer la suppression</h3>
+            <p>
+                Êtes-vous sûr de vouloir supprimer cet ingrédient ? Cette action est irréversible.
+            </p>
+            <div className="confirmation-actions">
+                <button type="button" className="cancel-button" onClick={onClose}>
+                    Annuler
+                </button>
+                <button type="button" className="delete-button" onClick={onConfirm}>
+                    Supprimer
+                </button>
             </div>
         </div>
     );
