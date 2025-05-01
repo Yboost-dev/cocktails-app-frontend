@@ -17,7 +17,6 @@ const Header = () => {
                 <Element href="/shooter" text="Les shooters"/>
             </div>
             <div className="header-search">
-                <Search/>
                 <Cart/>
             </div>
         </header>
