@@ -115,7 +115,7 @@ export const getUser = async (token) => {
 export const deleteUser = async (id) => {
     const token = isAuthenticated();
     try {
-        const response = await fetch(`${API_URL}/users/${id}`, {
+        await fetch(`${API_URL}/users/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

@@ -3,7 +3,7 @@ import Header from "../../components/header/Header";
 import { useParams, Link } from "react-router-dom";
 import { getArticleById } from "../../services/articles/articlesService";
 import { getAllIngredients } from "../../services/ingredients/ingredientsService";
-import { FaArrowLeft, FaShoppingCart, FaRegHeart } from "react-icons/fa";
+import { FaArrowLeft, FaShoppingCart } from "react-icons/fa";
 import "./Article.scss";
 import {useCart} from "../../context/cartContext";
 
