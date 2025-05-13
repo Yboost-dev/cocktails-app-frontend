@@ -33,7 +33,7 @@ const Form = ({ onSuccess, onError }) => {
                     htmlFor="email"
                     label="Email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)} // Met à jour l'état email
+                    onChange={(e) => setEmail(e.target.value)}
                 />
                 <Input
                     type="password"
@@ -41,9 +41,9 @@ const Form = ({ onSuccess, onError }) => {
                     htmlFor="password"
                     label="Mot de passe"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)} // Met à jour l'état password
+                    onChange={(e) => setPassword(e.target.value)}
                 />
-                <Button value="Se connecter" disable={loading} /> {/* Désactive le bouton pendant le chargement */}
+                <Button value="Se connecter" disable={loading} />
             </form>
         </div>
     )

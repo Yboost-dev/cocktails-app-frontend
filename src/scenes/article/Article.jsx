@@ -13,9 +13,9 @@ const Article = () => {
     const [articleData, setArticleData] = useState(null);
     const [errorData, setErrorData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [quantity, setQuantity] = useState(1);
+    const [quantity] = useState(1);
     const [isAvailable, setIsAvailable] = useState(true);
-    const [ingredientsStock, setIngredientsStock] = useState({});
+    const [ setIngredientsStock] = useState({});
     const [ingredientsResponse, setIngredientsResponse] = useState([]);
     const { id } = useParams();
 
@@ -37,18 +37,12 @@ const Article = () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                // Récupérer l'article
                 const articleResponse = await getArticleById(id);
                 const article = Array.isArray(articleResponse) ? articleResponse[0] : articleResponse;
 
-                // Récupérer le stock des ingrédients
                 const ingredients = await getAllIngredients();
                 setIngredientsResponse(ingredients);
 
-                console.log("Liste des ingrédients:", ingredients);
-                console.log("Article:", article);
-
-                // Créer un map des ID d'ingrédients à leur quantité en stock
                 const stockMap = {};
                 ingredients.forEach(ingredient => {
                     stockMap[ingredient.id] = ingredient.quantity || 0;
@@ -57,7 +51,6 @@ const Article = () => {
 
                 setArticleData(article);
 
-                // Vérifier si le cocktail est disponible
                 const available = checkCocktailAvailability(article, stockMap, ingredients);
                 setIsAvailable(available);
 
@@ -78,21 +71,16 @@ const Article = () => {
         }
     }, [id]);
 
-    // Vérifier si un cocktail est disponible en stock
     const checkCocktailAvailability = (article, stockMap, ingredients) => {
         if (!article || !article.ingredients || article.ingredients.length === 0) {
             return true;
         }
 
-        // Créer un map des noms d'ingrédients à leur quantité en stock
         const ingredientNameToStock = {};
         ingredients.forEach(ingredient => {
             ingredientNameToStock[ingredient.name.toLowerCase()] = ingredient.quantity;
         });
 
-        console.log("Map des noms d'ingrédients au stock:", ingredientNameToStock);
-
-        // Vérifier chaque ingrédient du cocktail
         for (const ingredient of article.ingredients) {
             const ingredientName = ingredient.name.toLowerCase();
             const requiredQuantity = ingredient.quantity || 0;
@@ -100,10 +88,8 @@ const Article = () => {
             // Chercher le stock par nom (insensible à la casse)
             const availableStock = ingredientNameToStock[ingredientName] || 0;
 
-            console.log(`Vérification de ${ingredientName}: requis=${requiredQuantity}, disponible=${availableStock}`);
 
             if (availableStock < requiredQuantity) {
-                console.log(`Ingrédient ${ingredientName} insuffisant: ${availableStock} < ${requiredQuantity}`);
                 return false;
             }
         }
@@ -111,7 +97,6 @@ const Article = () => {
         return true;
     };
 
-    // Calculer le prix total en fonction de la quantité
     const totalPrice = articleData ? (articleData.price * quantity).toFixed(2) : "0.00";
 
     if (loading) {

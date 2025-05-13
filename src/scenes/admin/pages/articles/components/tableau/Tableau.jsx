@@ -27,7 +27,6 @@ const Tableau = () => {
             setArticles(data);
             setLoading(false);
         } catch (error) {
-            console.error("Une erreur est survenue lors du chargement des articles :", error);
             toast.error("Impossible de charger les articles");
             setLoading(false);
         }
@@ -37,10 +36,9 @@ const Tableau = () => {
         fetchArticles();
     }, []);
 
-    // Fonction pour récupérer le nom d'une catégorie
     const fetchCategory = async (categoryId) => {
         if (categories[categoryId]) {
-            return; // Si la catégorie est déjà dans le cache, ne rien faire
+            return;
         }
 
         try {
@@ -50,11 +48,10 @@ const Tableau = () => {
                 [categoryId]: data.name,
             }));
         } catch (error) {
-            console.error(`Erreur lors de la récupération de la catégorie ${categoryId}:`, error);
+            toast.error("Impossible de charger les categories")
         }
     };
 
-    // Charger les catégories pour chaque article
     useEffect(() => {
         articles.forEach((article) => {
             if (article.categoryId) {
@@ -96,27 +93,22 @@ const Tableau = () => {
         }
     };
 
-    // Fonction pour gérer la création d'un article
     const handleArticleCreated = () => {
         fetchArticles();
         setShowCreateModal(false);
     };
 
-    // Fonction pour gérer la mise à jour d'un article
     const handleArticleUpdated = () => {
         fetchArticles();
         setShowEditModal(false);
         setArticleToEdit(null);
     };
 
-    // Filtrage des articles
     const filteredArticles = articles.filter(article => {
-        // Filtrer par recherche
         if (searchTerm && !article.title.toLowerCase().includes(searchTerm.toLowerCase())) {
             return false;
         }
 
-        // Filtrer par état de publication
         if (filter === 'published' && !article.published) {
             return false;
         } else if (filter === 'unpublished' && article.published) {

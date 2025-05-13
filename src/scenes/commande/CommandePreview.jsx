@@ -7,10 +7,8 @@ import {useCart} from "../../context/cartContext";
 import './CommandePreview.scss';
 import {createOrder} from "../../services/orders/ordersService";
 
-// Initialiser Stripe avec votre clé publique
 const stripePromise = loadStripe('pk_test_51RJfkRPUMtiQcH9yw7y7QdwpTqLewoX2L13GYCUQaktT2KTV9tQP6SDj06wO6oJ01tiN1RstTGEzQW7YeOkiI5Nz00LBERYK9a');
 
-// Composant pour le formulaire de paiement Stripe
 const CheckoutForm = ({totalAmount, onPaymentSuccess}) => {
     const stripe = useStripe();
     const elements = useElements();
@@ -28,7 +26,6 @@ const CheckoutForm = ({totalAmount, onPaymentSuccess}) => {
         setError(null);
 
         try {
-            // Créer un token de paiement avec les informations de la carte
             const {error, paymentMethod} = await stripe.createPaymentMethod({
                 type: 'card',
                 card: elements.getElement(CardElement),
@@ -40,10 +37,6 @@ const CheckoutForm = ({totalAmount, onPaymentSuccess}) => {
                 return;
             }
 
-            // Ici, vous devriez envoyer paymentMethod.id à votre backend
-            // pour finaliser le paiement avec Stripe
-
-            // Simuler une réponse réussie du backend
             setTimeout(() => {
                 onPaymentSuccess(paymentMethod.id);
                 setLoading(false);
@@ -92,9 +85,9 @@ const CheckoutForm = ({totalAmount, onPaymentSuccess}) => {
 const CommandePreview = () => {
     const {cartItems, clearCart} = useCart();
     const navigate = useNavigate();
-    const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' ou 'cash'
+    const [paymentMethod, setPaymentMethod] = useState('card');
     const [orderComplete, setOrderComplete] = useState(false);
-    const [error, setError] = useState(null); // Ajoutez cet état pour gérer les erreurs
+    const [setError] = useState(null);
     const [clientInfo, setClientInfo] = useState({
         name: '',
         email: '',
@@ -102,13 +95,11 @@ const CommandePreview = () => {
         phone: ''
     });
 
-    // Calculer le total de la commande
     const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-    const tva = subtotal * 0.2; // TVA à 20%
+    const tva = subtotal * 0.2;
     const total = subtotal + tva;
 
     useEffect(() => {
-        // Rediriger si le panier est vide
         if (cartItems.length === 0 && !orderComplete) {
             navigate('/');
         }
@@ -128,7 +119,6 @@ const CommandePreview = () => {
 
     const handlePaymentSuccess = async (paymentId) => {
         try {
-            // Préparer les données selon le format attendu par le backend
             const orderData = {
                 email: clientInfo.email,
                 phone: clientInfo.phone,
@@ -142,29 +132,22 @@ const CommandePreview = () => {
                 }))
             };
 
-            console.log(orderData);
-
-            // Envoyer les données au backend
             await createOrder(orderData);
 
-            // Marquer la commande comme terminée
             setOrderComplete(true);
 
-            // Vider le panier
             clearCart();
         } catch (error) {
             setError("Une erreur est survenue lors de la création de la commande.");
-            console.error('Erreur lors de la création de la commande:', error);
         }
     };
 
     const handleCashPayment = async () => {
         try {
-            // Préparer les données pour un paiement en espèces
             const orderData = {
                 email: clientInfo.email,
                 phone: clientInfo.phone,
-                tables: parseInt(clientInfo.table),
+                table: parseInt(clientInfo.table),
                 token: 'cash_payment',
                 status: 'pending',
                 paid: false,
@@ -174,17 +157,13 @@ const CommandePreview = () => {
                 }))
             };
 
-            // Envoyer les données au backend
             await createOrder(orderData);
 
-            // Marquer la commande comme terminée
             setOrderComplete(true);
 
-            // Vider le panier
             clearCart();
         } catch (error) {
             setError("Une erreur est survenue lors de la création de la commande.");
-            console.error('Erreur lors de la création de la commande:', error);
         }
     };
 

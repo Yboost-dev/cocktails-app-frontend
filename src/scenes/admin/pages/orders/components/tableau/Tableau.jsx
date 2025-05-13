@@ -12,7 +12,7 @@ const Tableau = () => {
                 setOrders(data);
             })
             .catch((error) => {
-                console.error("Une erreur est survenue :", error);
+                toast.error(`Une erreur est survenue, oupsi.. : ${error.message}`);
             });
     }, []);
 

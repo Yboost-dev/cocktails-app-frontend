@@ -19,7 +19,6 @@ const useCurrentUser = () => {
                 const fetchedUser = await getUser(token);
                 setUser(fetchedUser);
             } catch (err) {
-                console.error("Erreur lors de la récupération de l'utilisateur connecté :", err);
                 setError(err);
                 setUser(null);
             } finally {

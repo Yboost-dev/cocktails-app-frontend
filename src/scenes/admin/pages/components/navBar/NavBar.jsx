@@ -5,7 +5,6 @@ import Button from './components/buttons/Button'
 
 import useCurrentUser from "hooks/useCurrentUser";
 
-
 const NavBar = () => {
     const {user, loading, error} = useCurrentUser();
 

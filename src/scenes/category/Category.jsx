@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import Error from "./components/error/Error";
 import Card from "./components/cards/Card";
 import "./Category.scss";
+import {toast} from "react-toastify";
 
 const Category = () => {
     const [categoryData, setCategoryData] = useState(null);
@@ -18,10 +19,9 @@ const Category = () => {
                 .then((data) => {
                     setCategoryData(data);
                     setSortedArticles(data.articles);
-                    console.log("Données de la catégorie :", data);
                 })
                 .catch((error) => {
-                    console.error("Erreur lors de la récupération de la catégorie :", error);
+                    toast.error("Erreur lors de la récupération de la catégorie")
                 });
         }
     }, [category]);
@@ -38,15 +38,12 @@ const Category = () => {
                     articles.sort((a, b) => b.title.localeCompare(a.title));
                     break;
                 case "recent":
-                    // Supposant que nous avons un champ date dans les articles
                     articles.sort((a, b) => new Date(b.date) - new Date(a.date));
                     break;
                 case "oldest":
-                    // Supposant que nous avons un champ date dans les articles
                     articles.sort((a, b) => new Date(a.date) - new Date(b.date));
                     break;
                 default:
-                    // Pas de tri spécifique
                     break;
             }
 

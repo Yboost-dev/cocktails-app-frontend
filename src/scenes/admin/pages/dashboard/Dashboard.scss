@@ -149,10 +149,8 @@
     }
   }
 
-  // Sections du dashboard
   .dashboard-sections {
     display: grid;
-    grid-template-columns: 1fr 1fr;
     gap: 24px;
 
     @media (max-width: 1024px) {
@@ -193,7 +191,6 @@
     }
   }
 
-  // Commandes récentes
   .orders-container {
     display: flex;
     flex-direction: column;
@@ -228,17 +225,17 @@
         padding: 4px 8px;
         border-radius: 6px;
 
-        &.livré {
+        &.finish {
           background-color: rgba(16, 185, 129, 0.15);
           color: #10b981;
         }
 
-        &.en-préparation {
+        &.canceled {
           background-color: rgba(245, 158, 11, 0.15);
           color: #f59e0b;
         }
 
-        &.en-attente {
+        &.pending {
           background-color: rgba(99, 102, 241, 0.15);
           color: #6366f1;
         }

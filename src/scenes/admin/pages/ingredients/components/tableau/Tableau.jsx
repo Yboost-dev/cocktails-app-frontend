@@ -27,7 +27,6 @@ const IngredientsTable = () => {
             setIngredients(data);
             setLoading(false);
         } catch (error) {
-            console.error("Erreur lors de la récupération des ingrédients:", error);
             toast.error("Impossible de charger les ingrédients");
             setLoading(false);
         }
@@ -48,7 +47,6 @@ const IngredientsTable = () => {
 
     const handleEdit = (id) => {
         console.log(`Modifier l'ingrédient : ${id}`);
-        // Logique d'édition à implémenter
     };
 
     const handleDelete = (id) => {
@@ -81,17 +79,14 @@ const IngredientsTable = () => {
     };
 
     const checkLowStock = (quantity) => {
-        return quantity < 100; // Exemple: stock faible si moins de 100 unités
+        return quantity < 100;
     };
 
-    // Filtrage des ingrédients
     const filteredIngredients = ingredients.filter(ingredient => {
-        // Filtrer par recherche
         if (searchTerm && !ingredient.name.toLowerCase().includes(searchTerm.toLowerCase())) {
             return false;
         }
 
-        // Filtrer par niveau de stock
         if (filter === 'low' && !checkLowStock(ingredient.quantity)) {
             return false;
         } else if (filter === 'normal' && checkLowStock(ingredient.quantity)) {

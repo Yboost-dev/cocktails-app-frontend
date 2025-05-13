@@ -4,7 +4,7 @@ import { Plus, Trash2, X } from "lucide-react";
 import { getAllCategory } from "../../../../../../services/category/categoryService";
 import { getAllIngredients } from "../../../../../../services/ingredients/ingredientsService";
 import { getArticleById, updateArticle } from "../../../../../../services/articles/articlesService";
-import "./CreateArticleForm.scss"; // Réutiliser le même CSS
+import "./CreateArticleForm.scss";
 
 const EditArticleForm = ({ articleId, onClose, onSuccess }) => {
     const [article, setArticle] = useState({
@@ -192,17 +192,14 @@ const EditArticleForm = ({ articleId, onClose, onSuccess }) => {
                 }))
             };
 
-            console.log("Données à envoyer:", preparedArticle);
             await updateArticle(preparedArticle, selectedFile);
             toast.success("Cocktail mis à jour avec succès !");
 
-            // Notifier le composant parent du succès
             if (onSuccess) {
                 onSuccess();
             }
 
         } catch (error) {
-            console.error("Erreur lors de la mise à jour:", error);
             let errorMessage = error.message || "Erreur lors de la mise à jour du cocktail";
             setError(errorMessage);
             toast.error(errorMessage);

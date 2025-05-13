@@ -5,19 +5,16 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Tableau = () => {
-    // États pour la gestion des catégories
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
 
-    // États pour les modales
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [categoryToDelete, setCategoryToDelete] = useState(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [categoryToEdit, setCategoryToEdit] = useState(null);
 
-    // Charger toutes les catégories
     const fetchCategories = async () => {
         try {
             setLoading(true);
@@ -25,7 +22,6 @@ const Tableau = () => {
             setCategories(data);
             setLoading(false);
         } catch (error) {
-            console.error("Une erreur est survenue lors du chargement des catégories :", error);
             toast.error("Impossible de charger les catégories");
             setLoading(false);
         }
@@ -64,20 +60,17 @@ const Tableau = () => {
         }
     };
 
-    // Gérer la création d'une catégorie
     const handleCategoryCreated = () => {
         fetchCategories();
         setShowCreateModal(false);
     };
 
-    // Gérer la mise à jour d'une catégorie
     const handleCategoryUpdated = () => {
         fetchCategories();
         setShowEditModal(false);
         setCategoryToEdit(null);
     };
 
-    // Filtrer les catégories par nom
     const filteredCategories = categories.filter(category => {
         if (searchTerm && !category.name.toLowerCase().includes(searchTerm.toLowerCase())) {
             return false;
@@ -85,7 +78,6 @@ const Tableau = () => {
         return true;
     });
 
-    // Composant popup de confirmation de suppression
     const PopupDelete = ({ onClose, onConfirm }) => {
         return (
             <div className="delete-confirmation">
@@ -105,7 +97,6 @@ const Tableau = () => {
         );
     };
 
-    // Composant de création de catégorie
     const CreateCategoryForm = ({ onClose, onSuccess }) => {
         const [category, setCategory] = useState({
             name: ""
@@ -140,7 +131,6 @@ const Tableau = () => {
                     onSuccess();
                 }
             } catch (error) {
-                console.error("Erreur lors de la création:", error);
                 let errorMessage = error.message || "Erreur lors de la création de la catégorie";
                 setError(errorMessage);
                 toast.error(errorMessage);
@@ -198,7 +188,6 @@ const Tableau = () => {
         );
     };
 
-    // Composant de modification de catégorie
     const EditCategoryForm = ({ categoryId, onClose, onSuccess }) => {
         const [category, setCategory] = useState({
             id: categoryId,
@@ -208,14 +197,12 @@ const Tableau = () => {
         const [error, setError] = useState("");
         const [initialLoading, setInitialLoading] = useState(true);
 
-        // Charger les données de la catégorie à modifier
         useEffect(() => {
             const fetchCategoryData = async () => {
                 try {
                     setInitialLoading(true);
                     const categoryData = await getCategoryById(categoryId);
 
-                    // Vérifier si la réponse est un tableau et extraire le premier élément si nécessaire
                     const data = Array.isArray(categoryData) ? categoryData[0] : categoryData;
 
                     setCategory({
@@ -226,7 +213,6 @@ const Tableau = () => {
                     setInitialLoading(false);
                 } catch (error) {
                     toast.error("Erreur lors du chargement des données de la catégorie");
-                    console.error("Erreur de chargement:", error);
                     setInitialLoading(false);
                 }
             };
@@ -261,7 +247,6 @@ const Tableau = () => {
                     onSuccess();
                 }
             } catch (error) {
-                console.error("Erreur lors de la mise à jour:", error);
                 let errorMessage = error.message || "Erreur lors de la mise à jour de la catégorie";
                 setError(errorMessage);
                 toast.error(errorMessage);

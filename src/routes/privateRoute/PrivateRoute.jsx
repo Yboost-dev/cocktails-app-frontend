@@ -29,15 +29,12 @@ const PrivateRoute = () => {
         fetchUser();
     }, []);
 
-    // Pendant le chargement, affiche un état de chargement temporaire
     if (loading) {
         return <div>Chargement...</div>;
     }
 
-    // Vérifie si l'utilisateur est valide (et non une erreur)
     const isAuthenticated = user && !user.error;
 
-    // Redirection selon le statut de l'utilisateur
     return isAuthenticated ? <Outlet /> : <Navigate to="/oups" />;
 };
 

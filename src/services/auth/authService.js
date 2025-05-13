@@ -1,5 +1,15 @@
+/** URL de base de l'API, récupérée depuis les variables d'environnement */
 const API_URL = process.env.REACT_APP_API_URL;
 
+/**
+ * Authentifie un utilisateur et récupère un token
+ * @async
+ * @function login
+ * @param {string} email - Adresse email de l'utilisateur
+ * @param {string} password - Mot de passe de l'utilisateur
+ * @returns {Promise<Object>} Une promesse qui résout vers un objet contenant le token et les informations utilisateur
+ * @throws {Error} Lance une erreur si l'authentification échoue
+ */
 export const login = async (email, password) => {
     try {
         console.log(email, password);
@@ -22,11 +32,23 @@ export const login = async (email, password) => {
 
         return data;
     } catch (error) {
-        console.error(error);
         throw error;
     }
 };
 
+/**
+ * Enregistre un nouvel utilisateur dans le système
+ * @async
+ * @function register
+ * @param {Object} user - Données de l'utilisateur à créer
+ * @param {string} user.email - Email de l'utilisateur
+ * @param {string} user.password - Mot de passe de l'utilisateur
+ * @param {string} [user.firstName] - Prénom de l'utilisateur (optionnel)
+ * @param {string} [user.lastName] - Nom de famille de l'utilisateur (optionnel)
+ * @param {string} [user.role] - Rôle de l'utilisateur (optionnel)
+ * @returns {Promise<Object>} Une promesse qui résout vers l'objet utilisateur créé
+ * @throws {Error} Lance une erreur si l'enregistrement échoue
+ */
 export const register = async (user) => {
     const token = isAuthenticated();
     try {
@@ -36,7 +58,7 @@ export const register = async (user) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify(user), // Envoie les données utilisateur au serveur
+            body: JSON.stringify(user),
         });
 
         if (!response.ok) {
@@ -44,14 +66,19 @@ export const register = async (user) => {
         }
 
         const data = await response.json();
-        return data; // Retourne les données de l'utilisateur créé
+        return data;
     } catch (error) {
-        console.error("Erreur lors de l'inscription :", error);
-        throw error; // Relance l'erreur pour une gestion dans le composant React
+        throw error;
     }
 };
 
-// Fonction pour récupérer l'utilisateur connecté
+/**
+ * Récupère les informations de l'utilisateur connecté
+ * @async
+ * @function getUser
+ * @param {string} token - Token d'authentification
+ * @returns {Promise<Object>} Une promesse qui résout vers les données de l'utilisateur ou un objet d'erreur
+ */
 export const getUser = async (token) => {
     if (!token) {
         return { error: "Utilisateur non connecté." };
@@ -70,13 +97,21 @@ export const getUser = async (token) => {
             return { error: "Impossible de récupérer les informations de l'utilisateur." };
         }
 
-        return await response.json(); // Retourne les données utilisateur si succès
+        return await response.json();
     } catch (error) {
-        console.error(error);
         return { error: "Une erreur s'est produite lors de la récupération de l'utilisateur." };
     }
 };
 
+
+/**
+ * Supprime un utilisateur par son identifiant
+ * @async
+ * @function deleteUser
+ * @param {string|number} id - Identifiant unique de l'utilisateur à supprimer
+ * @returns {Promise<Object>} Une promesse qui résout vers un objet de confirmation
+ * @throws {Error} Lance une erreur si la suppression échoue
+ */
 export const deleteUser = async (id) => {
     const token = isAuthenticated();
     try {
@@ -88,16 +123,24 @@ export const deleteUser = async (id) => {
             },
         });
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }
 
+/**
+ * Vérifie si un utilisateur est actuellement authentifié
+ * @function isAuthenticated
+ * @returns {string|null} Le token d'authentification s'il existe, sinon null
+ * @example
+ */
 export const isAuthenticated = () => {
     return localStorage.getItem("token");
 }
 
-// Fonction pour se déconnecter (logout)
+/**
+ * Déconnecte l'utilisateur en supprimant son token d'authentification
+ * @function logout
+ */
 export const logout = () => {
     localStorage.removeItem("token");
 };

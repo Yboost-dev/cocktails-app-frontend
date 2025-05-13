@@ -26,18 +26,15 @@ const AdminOrders = () => {
             setOrders(data);
             setLoading(false);
         } catch (error) {
-            console.error("Erreur lors de la récupération des commandes:", error);
             toast.error("Impossible de charger les commandes");
             setLoading(false);
         }
     };
 
-    // Fonction pour mettre à jour le statut d'une commande
     const handleUpdateOrderStatus = async (orderId, newStatus) => {
         try {
             await updateOrderStatus(orderId, newStatus);
 
-            // Mettre à jour l'état local
             setOrders(prevOrders =>
                 prevOrders.map(order =>
                     order.id === orderId ? { ...order, status: newStatus } : order
@@ -46,17 +43,14 @@ const AdminOrders = () => {
 
             toast.success(`Commande #${orderId} mise à jour avec succès`);
         } catch (error) {
-            console.error("Erreur lors de la mise à jour du statut:", error);
             toast.error("Échec de la mise à jour du statut");
         }
     };
 
-    // Fonction pour mettre à jour le statut de paiement
     const handleUpdatePaymentStatus = async (orderId, isPaid) => {
         try {
             await updatePaymentStatus(orderId, isPaid);
 
-            // Mettre à jour l'état local
             setOrders(prevOrders =>
                 prevOrders.map(order =>
                     order.id === orderId ? { ...order, paid: isPaid } : order
@@ -65,7 +59,6 @@ const AdminOrders = () => {
 
             toast.success(`Statut de paiement de la commande #${orderId} mis à jour`);
         } catch (error) {
-            console.error("Erreur lors de la mise à jour du paiement:", error);
             toast.error("Échec de la mise à jour du statut de paiement");
         }
     };
@@ -96,21 +89,17 @@ const AdminOrders = () => {
         }
     };
 
-    // Fonction pour obtenir l'icône de paiement basée sur le statut de la commande et le statut de paiement
     const getPaymentIcon = (status, paid) => {
-        // Si la commande est annulée, afficher une icône d'alerte
         if (status === 'canceled') {
             return <AlertCircle size={16} className="payment-icon canceled" />;
         }
 
-        // Si la commande est terminée, afficher une icône en fonction du statut de paiement
         if (status === 'finish') {
             return paid
                 ? <CreditCard size={16} className="payment-icon paid" />
                 : <DollarSign size={16} className="payment-icon unpaid" />;
         }
 
-        // Pour les commandes en attente, pas d'icône spéciale
         return null;
     };
 
@@ -146,12 +135,10 @@ const AdminOrders = () => {
     };
 
     const filteredOrders = orders.filter(order => {
-        // Filtrage par statut
         if (filter !== 'all' && order.status !== filter) {
             return false;
         }
 
-        // Recherche par email
         if (searchTerm && !order.email.toLowerCase().includes(searchTerm.toLowerCase())) {
             return false;
         }
@@ -297,7 +284,6 @@ const AdminOrders = () => {
                 </div>
             </div>
 
-            {/* Modal pour afficher les détails de la commande */}
             {modalOpen && selectedOrder && (
                 <div className="order-modal-overlay" onClick={closeOrderDetails}>
                     <div className="order-modal" onClick={e => e.stopPropagation()}>

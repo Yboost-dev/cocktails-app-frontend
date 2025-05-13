@@ -1,5 +1,13 @@
+/** URL de base de l'API, récupérée depuis les variables d'environnement */
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
+/**
+ * Récupère tous les articles depuis l'API
+ * @async
+ * @function getAllArticles
+ * @returns {Promise<Array>} Une promesse qui résout vers un tableau de tous les articles
+ * @throws {Error} Lance une erreur si la requête échoue
+ */
 export const getAllArticles = async () => {
     const token = localStorage.getItem("token");
     try {
@@ -11,16 +19,20 @@ export const getAllArticles = async () => {
             },
         });
 
-        // Ne lisez la réponse qu'une seule fois
-        const data = await response.json();
-        console.log(data); // Loguer les données après les avoir récupérées
-        return data;
+        return await response.json();
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }
 
+/**
+ * Récupère un article spécifique par son ID
+ * @async
+ * @function getArticleById
+ * @param {string|number} id - Identifiant unique de l'article à récupérer
+ * @returns {Promise<Object>} Une promesse qui résout vers l'objet article
+ * @throws {Error} Lance une erreur si l'article n'existe pas ou si la requête échoue
+ */
 export const getArticleById = async (id) => {
     try {
         const response = await fetch(`${API_BASE_URL}/articles/${id}`, {
@@ -48,6 +60,15 @@ export const getArticleById = async (id) => {
     }
 }
 
+
+/**
+ * Récupère une catégorie par son nom
+ * @async
+ * @function getCategory
+ * @param {string} category - Nom de la catégorie à récupérer
+ * @returns {Promise<Object>} Une promesse qui résout vers l'objet catégorie
+ * @throws {Error} Lance une erreur si la catégorie n'existe pas ou si la requête échoue
+ */
 export const getCategory = async (category) => {
     try {
         const response = await fetch(`${API_BASE_URL}/category/name/${category}`, {
@@ -63,6 +84,23 @@ export const getCategory = async (category) => {
     }
 }
 
+/**
+ * Crée un nouvel article avec ses ingrédients et une image
+ * @async
+ * @function createArticle
+ * @param {Object} articleData - Données de l'article à créer
+ * @param {string} articleData.title - Titre de l'article
+ * @param {string} articleData.description - Description de l'article
+ * @param {number} articleData.price - Prix de l'article
+ * @param {number} articleData.categoryId - ID de la catégorie de l'article
+ * @param {boolean} articleData.published - Statut de publication de l'article
+ * @param {Array<Object>} articleData.ingredients - Liste des ingrédients avec leurs quantités
+ * @param {number} articleData.ingredients[].ingredientId - ID de l'ingrédient
+ * @param {number} articleData.ingredients[].quantity - Quantité de l'ingrédient
+ * @param {File} file - Fichier image de l'article
+ * @returns {Promise<Object>} Une promesse qui résout vers l'article créé
+ * @throws {Error} Lance une erreur si la création échoue
+ */
 export const createArticle = async (articleData, file) => {
     const token = localStorage.getItem("token");
 
@@ -110,6 +148,22 @@ export const createArticle = async (articleData, file) => {
     }
 };
 
+/**
+ * Met à jour un article existant
+ * @async
+ * @function updateArticle
+ * @param {Object} articleData - Données de l'article à mettre à jour
+ * @param {number} articleData.id - ID de l'article à mettre à jour
+ * @param {string} articleData.title - Nouveau titre de l'article
+ * @param {string} articleData.description - Nouvelle description
+ * @param {number} articleData.price - Nouveau prix
+ * @param {number} articleData.categoryId - Nouvelle catégorie
+ * @param {boolean} articleData.published - Nouveau statut de publication
+ * @param {Array<Object>} articleData.ingredients - Nouveaux ingrédients avec quantités
+ * @param {File} file - Nouvelle image de l'article (ou null pour conserver l'existante)
+ * @returns {Promise<Object>} Une promesse qui résout vers l'article mis à jour
+ * @throws {Error} Lance une erreur si la mise à jour échoue
+ */
 export const updateArticle = async (articleData, file) => {
     const token = localStorage.getItem("token");
     try {
@@ -138,6 +192,14 @@ export const updateArticle = async (articleData, file) => {
     }
 }
 
+/**
+ * Supprime un article par son identifiant
+ * @async
+ * @function deleteArticle
+ * @param {string|number} id - Identifiant unique de l'article à supprimer
+ * @returns {Promise<Object>} Une promesse qui résout vers un objet de confirmation
+ * @throws {Error} Lance une erreur si la suppression échoue
+ */
 export const deleteArticle = async (id) => {
     const token = localStorage.getItem("token");
     try {

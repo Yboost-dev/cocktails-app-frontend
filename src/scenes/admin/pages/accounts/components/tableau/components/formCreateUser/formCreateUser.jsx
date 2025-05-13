@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './formCreateUser.scss'; // Importation de votre SCSS
+import './formCreateUser.scss';
 
 const FormCreateUser = ({ onClose, onSave }) => {
     const [formData, setFormData] = useState({

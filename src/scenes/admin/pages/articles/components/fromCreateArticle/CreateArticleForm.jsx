@@ -33,7 +33,6 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
                 setIngredientsList(ingredientsData);
             } catch (error) {
                 toast.error("Erreur lors du chargement des données");
-                console.error("Erreur de chargement:", error);
             }
         };
 
@@ -149,7 +148,6 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
                 price: parseFloat(article.price),
                 categoryId: parseInt(article.categoryId, 10),
                 published: article.published,
-                // S'assurer que les ingrédients sont au bon format
                 ingredients: article.ingredients.map(ing => ({
                     ingredientId: parseInt(ing.ingredientId, 10),
                     quantity: parseInt(ing.quantity, 10)
@@ -160,7 +158,6 @@ const CreateArticleForm = ({onClose, onSuccess}) => {
             await createArticle(preparedArticle, selectedFile);
             toast.success("Cocktail créé avec succès !");
 
-            // Notifier le composant parent du succès
             if (onSuccess) {
                 onSuccess();
             }
