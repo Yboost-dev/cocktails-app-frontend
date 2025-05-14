@@ -13,7 +13,7 @@ import PopupDelete from "./components/popupDelete/popupDelete";
 const Tableau = ({onSuccess, onError}) => {
     const [users, setUsers] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [userToDelete, setUserToDelete] = useState(null);
 

@@ -39,31 +39,39 @@ const Article = () => {
             try {
                 setLoading(true);
                 const articleResponse = await getArticleById(id);
-                const article = Array.isArray(articleResponse) ? articleResponse[0] : articleResponse;
 
-                if (!article) {
+                if (!articleResponse) {
                     throw new Error(JSON.stringify({err: {message: "Ce cocktail n'existe pas"}}));
                 }
 
-                const ingredients = await getAllIngredients();
-                setIngredientsResponse(ingredients);
+                setArticleData(articleResponse);
 
-                const stockMap = {};
-                ingredients.forEach(ingredient => {
-                    stockMap[ingredient.id] = ingredient.quantity || 0;
-                });
-                setIngredientsStock(stockMap);
+                try {
+                    const ingredients = await getAllIngredients();
+                    setIngredientsResponse(Array.isArray(ingredients) ? ingredients : []);
 
-                setArticleData(article);
+                    const stockMap = {};
+                    if (Array.isArray(ingredients)) {
+                        ingredients.forEach(ingredient => {
+                            if (ingredient && ingredient.id) {
+                                stockMap[ingredient.id] = ingredient.quantity || 0;
+                            }
+                        });
+                    }
+                    setIngredientsStock(stockMap);
 
-                const available = checkCocktailAvailability(article, stockMap, ingredients);
-                setIsAvailable(available);
+                    if (articleResponse && articleResponse.ingredients && Array.isArray(articleResponse.ingredients) && Array.isArray(ingredients)) {
+                        const available = checkCocktailAvailability(articleResponse, stockMap, ingredients);
+                        setIsAvailable(available);
+                    }
+                } catch (ingredientError) {
+                    setIngredientsResponse([]);
+                }
 
                 setLoading(false);
             } catch (error) {
-                console.error("Erreur lors du chargement de l'article:", error);
                 try {
-                    const parsedError = JSON.parse(error.message);
+                    const parsedError = typeof error.message === 'string' ? JSON.parse(error.message) : {err: {message: "Une erreur est survenue"}};
                     setErrorData(parsedError);
                 } catch (e) {
                     setErrorData({err: {message: "Une erreur est survenue"}});
@@ -78,18 +86,32 @@ const Article = () => {
     }, [id]);
 
     const checkCocktailAvailability = (article, stockMap, ingredients) => {
-        if (!article || !article.ingredients || article.ingredients.length === 0) {
+        if (!article || !article.ingredients || !Array.isArray(article.ingredients) || article.ingredients.length === 0) {
             return true;
         }
 
         const ingredientNameToStock = {};
-        ingredients.forEach(ingredient => {
-            ingredientNameToStock[ingredient.name.toLowerCase()] = ingredient.quantity;
-        });
+        if (Array.isArray(ingredients)) {
+            ingredients.forEach(ingredient => {
+                if (ingredient && ingredient.name) {
+                    ingredientNameToStock[ingredient.name.toLowerCase()] = ingredient.quantity || 0;
+                }
+            });
+        }
 
         for (const ingredient of article.ingredients) {
-            const ingredientName = ingredient.name.toLowerCase();
-            const requiredQuantity = ingredient.quantity || 0;
+            let ingredientName = '';
+            let requiredQuantity = 0;
+
+            if (ingredient && ingredient.name) {
+                ingredientName = ingredient.name.toLowerCase();
+                requiredQuantity = ingredient.quantity || 0;
+            } else if (ingredient && ingredient.ingredient && ingredient.ingredient.name) {
+                ingredientName = ingredient.ingredient.name.toLowerCase();
+                requiredQuantity = ingredient.quantity || 0;
+            } else {
+                continue;
+            }
 
             const availableStock = ingredientNameToStock[ingredientName] || 0;
 
@@ -145,6 +167,15 @@ const Article = () => {
         );
     }
 
+    const hasNestedIngredients = articleData.ingredients &&
+        Array.isArray(articleData.ingredients) &&
+        articleData.ingredients.some(ing => ing && ing.ingredient && ing.ingredient.name);
+
+    const hasValidIngredients = articleData.ingredients &&
+        Array.isArray(articleData.ingredients) &&
+        articleData.ingredients.length > 0 &&
+        (articleData.ingredients.some(ing => ing && ing.name) || hasNestedIngredients);
+
     return (
         <div className="article-page">
             <Header/>
@@ -192,33 +223,51 @@ const Article = () => {
                         <div className="article-ingredients">
                             <h3>Ingrédients</h3>
                             <ul className="ingredients-list">
-                                {articleData.ingredients && articleData.ingredients.length > 0 ? (
+                                {hasValidIngredients ? (
                                     articleData.ingredients.map((ingredient, index) => {
-                                        const stockIngredient = ingredientsResponse.find(
-                                            ing => ing.name && ingredient.name &&
-                                                ing.name.toLowerCase() === ingredient.name.toLowerCase()
-                                        );
+                                        // Déterminer le format de l'ingrédient
+                                        let name = '';
+                                        let quantity = 0;
+                                        let unit = 'ml';
+
+                                        if (ingredient && ingredient.name) {
+                                            name = ingredient.name;
+                                            quantity = ingredient.quantity || 0;
+                                            unit = ingredient.unit || 'ml';
+                                        } else if (ingredient && ingredient.ingredient && ingredient.ingredient.name) {
+                                            name = ingredient.ingredient.name;
+                                            quantity = ingredient.quantity || 0;
+                                            unit = ingredient.ingredient.unit || 'ml';
+                                        } else {
+                                            return null;
+                                        }
+
+                                        const stockIngredient = Array.isArray(ingredientsResponse) &&
+                                            ingredientsResponse.find(
+                                                ing => ing && ing.name && name &&
+                                                    ing.name.toLowerCase() === name.toLowerCase()
+                                            );
 
                                         const isIngredientAvailable = stockIngredient &&
-                                            stockIngredient.quantity >= ingredient.quantity;
+                                            stockIngredient.quantity >= quantity;
 
                                         return (
                                             <li key={index}
                                                 className={`ingredient-item ${!isIngredientAvailable ? 'unavailable' : ''}`}>
                                                 <span className="ingredient-name">
-                                                    {ingredient.name}
+                                                    {name}
                                                     {!isIngredientAvailable && (
                                                         <span className="stock-warning"> (En rupture)</span>
                                                     )}
                                                 </span>
                                                 <span className="ingredient-quantity">
-                                                    {ingredient.quantity} {ingredient.unit || 'ml'}
+                                                    {quantity} {unit}
                                                 </span>
                                             </li>
                                         );
                                     })
                                 ) : (
-                                    <li className="ingredient-item">Aucun ingrédient disponible</li>
+                                    <li className="ingredient-item">Recette confidentielle</li>
                                 )}
                             </ul>
                         </div>

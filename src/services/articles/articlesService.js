@@ -42,20 +42,26 @@ export const getArticleById = async (id) => {
                 "Authorization": `Bearer ${localStorage.getItem("token")}`
             },
         });
+
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(JSON.stringify(errorData));
         }
-        const data = await response.json();
-        console.log("Article récupéré (brut):", data);
 
-        // Si c'est un tableau, retourner le premier élément, sinon retourner les données telles quelles
+        const data = await response.json();
+
+        if (!data) {
+            throw new Error(JSON.stringify({err: {message: "Article non trouvé"}}));
+        }
+
         const formattedData = Array.isArray(data) ? data[0] : data;
-        console.log("Article formaté:", formattedData);
+
+        if (!formattedData || !formattedData.id) {
+            throw new Error(JSON.stringify({err: {message: "Article non trouvé après formatage"}}));
+        }
 
         return formattedData;
     } catch (error) {
-        console.error("Erreur dans getArticleById:", error);
         throw error;
     }
 }
@@ -79,7 +85,6 @@ export const getCategory = async (category) => {
         });
         return await response.json();
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }
@@ -120,13 +125,6 @@ export const createArticle = async (articleData, file) => {
             formData.append(`ingredients[${index}][quantity]`, ingredient.quantity.toString());
         });
 
-        console.log("FormData envoyé:",
-            Array.from(formData.entries()).reduce((obj, [key, value]) => {
-                obj[key] = value;
-                return obj;
-            }, {})
-        );
-
         const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3000'}/articles`, {
             method: "POST",
             headers: {
@@ -137,13 +135,11 @@ export const createArticle = async (articleData, file) => {
 
         if (!response.ok) {
             const errorData = await response.json();
-            console.error("Erreur de création d'article:", errorData);
             throw new Error(errorData.message || "Erreur lors de la création de l'article");
         }
 
         return await response.json();
     } catch (error) {
-        console.error("Erreur lors de la création de l'article:", error);
         throw error;
     }
 };
@@ -187,7 +183,6 @@ export const updateArticle = async (articleData, file) => {
         })
         return await response.json();
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }
@@ -212,7 +207,6 @@ export const deleteArticle = async (id) => {
         });
         return await response.json();
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }
