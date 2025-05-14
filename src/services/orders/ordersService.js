@@ -51,10 +51,8 @@ export const getRecentOrders = async (limit = 3) => {
         });
 
         const sortedOrders = ordersWithTotal.sort((a, b) =>
-            new Date(b.date) - new Date(a.date)
+            new Date(b.createdAt) - new Date(a.createdAt)
         );
-
-        console.log(sortedOrders);
 
         return sortedOrders.slice(0, limit);
     } catch (error) {
