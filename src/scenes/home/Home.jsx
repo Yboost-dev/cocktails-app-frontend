@@ -2,6 +2,7 @@ import React from "react";
 import Header from "components/header/Header";
 import "./Home.scss";
 import Widget from "./components/widget/Widget";
+import LastArticle from "./components/lastArticle/lastArticle";
 
 const Home = () => {
     return (
@@ -19,7 +20,9 @@ const Home = () => {
                         <Widget img="img/short.webp" titre="Short Drink" direction="short-drink"/>
                     </div>
                 </div>
-
+            </section>
+            <section>
+                <LastArticle/>
             </section>
         </div>
     );

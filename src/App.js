@@ -16,10 +16,12 @@ import AdminAccounts from "scenes/admin/pages/accounts/Accounts";
 import AdminArticles from "scenes/admin/pages/articles/Articles";
 import AdminIngredients from "scenes/admin/pages/ingredients/Ingredients";
 import AdminCategory from "scenes/admin/pages/category/Category";
+import Footer from "./components/footer/Footer";
 
 const App = () => {
     return (
-        <Router>
+        <>
+            <Router>
             <Routes>
                 {/* Routes public */}
                 <Route path="/" element={<Home/>}/>
@@ -46,9 +48,13 @@ const App = () => {
 
                 {/* Route not found */}
                 <Route path="*" element={<NotFound/>}/>
+
             </Routes>
         </Router>
-    );
+            <Footer/>
+        </>
+
+);
 };
 
 export default App;
