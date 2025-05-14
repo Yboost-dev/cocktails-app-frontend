@@ -7,7 +7,7 @@ import {useCart} from "../../context/cartContext";
 import './CommandePreview.scss';
 import {createOrder} from "../../services/orders/ordersService";
 
-const stripePromise = loadStripe('pk_test_51RJfkRPUMtiQcH9yw7y7QdwpTqLewoX2L13GYCUQaktT2KTV9tQP6SDj06wO6oJ01tiN1RstTGEzQW7YeOkiI5Nz00LBERYK9a');
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const CheckoutForm = ({totalAmount, onPaymentSuccess}) => {
     const stripe = useStripe();

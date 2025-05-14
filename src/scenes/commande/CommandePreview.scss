@@ -25,7 +25,6 @@
     transition: all 0.3s ease;
 
     &:hover {
-      transform: translateY(-2px);
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     }
 
@@ -234,7 +233,6 @@
         }
 
         &:hover .payment-icon, &.active .payment-icon {
-          transform: scale(1.05);
           background: rgba(188, 144, 247, 0.25);
         }
       }
@@ -293,7 +291,6 @@
 
     &:hover {
       background-color: var(--primary-hover);
-      transform: translateY(-2px);
       box-shadow: 0 6px 18px rgba(188, 144, 247, 0.4);
     }
 
@@ -392,7 +389,6 @@
 
       &:hover {
         background-color: var(--primary-hover);
-        transform: translateY(-2px);
         box-shadow: 0 6px 18px rgba(188, 144, 247, 0.4);
       }
 
