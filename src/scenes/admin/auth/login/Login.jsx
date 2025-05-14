@@ -6,7 +6,7 @@ import Errors from "components/errors/errorsMessage/ErrorsMessage";
 
 const Login = () => {
     const [error, setError] = useState('');
-    const [user, setUser] = useState(null);  // Correction ici - ajout de 'user'
+    const [user, setUser] = useState(null);
 
     const handleSuccess = (data) => {
         setUser(data);

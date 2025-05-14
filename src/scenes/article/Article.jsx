@@ -1,15 +1,14 @@
-
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from "../../components/header/Header";
-import { useParams, Link } from "react-router-dom";
-import { getArticleById } from "../../services/articles/articlesService";
-import { getAllIngredients } from "../../services/ingredients/ingredientsService";
-import { FaArrowLeft, FaShoppingCart } from "react-icons/fa";
+import {useParams, Link} from "react-router-dom";
+import {getArticleById} from "../../services/articles/articlesService";
+import {getAllIngredients} from "../../services/ingredients/ingredientsService";
+import {FaArrowLeft, FaShoppingCart} from "react-icons/fa";
 import "./Article.scss";
 import {useCart} from "../../context/cartContext";
 
 const Article = () => {
-    const { addToCart, toggleCartVisibility } = useCart();
+    const {addToCart, toggleCartVisibility} = useCart();
 
     const [articleData, setArticleData] = useState(null);
     const [errorData, setErrorData] = useState(null);
@@ -18,7 +17,7 @@ const Article = () => {
     const [isAvailable, setIsAvailable] = useState(true);
     const [ingredientsStock, setIngredientsStock] = useState({});
     const [ingredientsResponse, setIngredientsResponse] = useState([]);
-    const { id } = useParams();
+    const {id} = useParams();
 
     const handleAddToCart = () => {
         if (!articleData || !isAvailable) return;
@@ -43,7 +42,7 @@ const Article = () => {
                 const article = Array.isArray(articleResponse) ? articleResponse[0] : articleResponse;
 
                 if (!article) {
-                    throw new Error(JSON.stringify({ err: { message: "Ce cocktail n'existe pas" } }));
+                    throw new Error(JSON.stringify({err: {message: "Ce cocktail n'existe pas"}}));
                 }
 
                 const ingredients = await getAllIngredients();
@@ -67,7 +66,7 @@ const Article = () => {
                     const parsedError = JSON.parse(error.message);
                     setErrorData(parsedError);
                 } catch (e) {
-                    setErrorData({ err: { message: "Une erreur est survenue" } });
+                    setErrorData({err: {message: "Une erreur est survenue"}});
                 }
                 setLoading(false);
             }
@@ -107,7 +106,7 @@ const Article = () => {
     if (loading) {
         return (
             <div>
-                <Header />
+                <Header/>
                 <div className="article-loading">
                     <div className="loading-spinner"></div>
                     <p>Chargement du cocktail...</p>
@@ -119,12 +118,12 @@ const Article = () => {
     if (errorData) {
         return (
             <div>
-                <Header />
+                <Header/>
                 <div className="article-error">
                     <h2>Oups !</h2>
                     <p>{errorData.err?.message || "Ce cocktail n'existe pas"}</p>
                     <Link to="/" className="back-button">
-                        <FaArrowLeft /> Retour a l'accueil
+                        <FaArrowLeft/> Retour a l'accueil
                     </Link>
                 </div>
             </div>
@@ -134,12 +133,12 @@ const Article = () => {
     if (!articleData) {
         return (
             <div>
-                <Header />
+                <Header/>
                 <div className="article-not-found">
                     <h2>Cocktail introuvable</h2>
                     <p>Nous n'avons pas pu trouver le cocktail que vous cherchez.</p>
                     <Link to="/categories" className="back-button">
-                        <FaArrowLeft /> Retour aux catégories
+                        <FaArrowLeft/> Retour aux catégories
                     </Link>
                 </div>
             </div>
@@ -148,12 +147,12 @@ const Article = () => {
 
     return (
         <div className="article-page">
-            <Header />
+            <Header/>
 
             <div className="article-container">
                 <div className="article-navigation">
                     <Link to="#" onClick={() => window.history.back()} className="back-link">
-                        <FaArrowLeft /> Retour
+                        <FaArrowLeft/> Retour
                     </Link>
                 </div>
 
@@ -204,7 +203,8 @@ const Article = () => {
                                             stockIngredient.quantity >= ingredient.quantity;
 
                                         return (
-                                            <li key={index} className={`ingredient-item ${!isIngredientAvailable ? 'unavailable' : ''}`}>
+                                            <li key={index}
+                                                className={`ingredient-item ${!isIngredientAvailable ? 'unavailable' : ''}`}>
                                                 <span className="ingredient-name">
                                                     {ingredient.name}
                                                     {!isIngredientAvailable && (
@@ -229,13 +229,14 @@ const Article = () => {
                                 disabled={!isAvailable}
                                 onClick={handleAddToCart}
                             >
-                                <FaShoppingCart /> {isAvailable ? 'Ajouter au panier' : 'Indisponible'}
+                                <FaShoppingCart/> {isAvailable ? 'Ajouter au panier' : 'Indisponible'}
                             </button>
                         </div>
 
                         {!isAvailable && (
                             <div className="unavailable-message">
-                                <p>Ce cocktail est temporairement indisponible car certains ingrédients sont en rupture de stock.</p>
+                                <p>Ce cocktail est temporairement indisponible car certains ingrédients sont en rupture
+                                    de stock.</p>
                             </div>
                         )}
                     </div>
