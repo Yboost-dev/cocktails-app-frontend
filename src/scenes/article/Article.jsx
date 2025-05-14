@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import Header from "../../components/header/Header";
 import { useParams, Link } from "react-router-dom";
@@ -15,7 +16,7 @@ const Article = () => {
     const [loading, setLoading] = useState(true);
     const [quantity] = useState(1);
     const [isAvailable, setIsAvailable] = useState(true);
-    const [ setIngredientsStock] = useState({});
+    const [ingredientsStock, setIngredientsStock] = useState({});
     const [ingredientsResponse, setIngredientsResponse] = useState([]);
     const { id } = useParams();
 
@@ -26,12 +27,13 @@ const Article = () => {
             id: articleData.id,
             title: articleData.title,
             price: articleData.price,
+            quantity: quantity,
+            imagePath: articleData.imagePath
         };
 
         addToCart(itemToAdd);
         toggleCartVisibility();
     };
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,6 +41,10 @@ const Article = () => {
                 setLoading(true);
                 const articleResponse = await getArticleById(id);
                 const article = Array.isArray(articleResponse) ? articleResponse[0] : articleResponse;
+
+                if (!article) {
+                    throw new Error(JSON.stringify({ err: { message: "Ce cocktail n'existe pas" } }));
+                }
 
                 const ingredients = await getAllIngredients();
                 setIngredientsResponse(ingredients);
@@ -56,6 +62,7 @@ const Article = () => {
 
                 setLoading(false);
             } catch (error) {
+                console.error("Erreur lors du chargement de l'article:", error);
                 try {
                     const parsedError = JSON.parse(error.message);
                     setErrorData(parsedError);
@@ -85,9 +92,7 @@ const Article = () => {
             const ingredientName = ingredient.name.toLowerCase();
             const requiredQuantity = ingredient.quantity || 0;
 
-            // Chercher le stock par nom (insensible à la casse)
             const availableStock = ingredientNameToStock[ingredientName] || 0;
-
 
             if (availableStock < requiredQuantity) {
                 return false;
@@ -101,9 +106,12 @@ const Article = () => {
 
     if (loading) {
         return (
-            <div className="article-loading">
-                <div className="loading-spinner"></div>
-                <p>Chargement du cocktail...</p>
+            <div>
+                <Header />
+                <div className="article-loading">
+                    <div className="loading-spinner"></div>
+                    <p>Chargement du cocktail...</p>
+                </div>
             </div>
         );
     }
@@ -115,8 +123,8 @@ const Article = () => {
                 <div className="article-error">
                     <h2>Oups !</h2>
                     <p>{errorData.err?.message || "Ce cocktail n'existe pas"}</p>
-                    <Link to="/categories" className="back-button">
-                        <FaArrowLeft /> Retour aux catégories
+                    <Link to="/" className="back-button">
+                        <FaArrowLeft /> Retour a l'accueil
                     </Link>
                 </div>
             </div>
@@ -153,9 +161,13 @@ const Article = () => {
                     <div className="article-image-section">
                         <div className="article-image-container">
                             <img
-                                src={`${process.env.REACT_APP_API_URL}${articleData.imagePath}`}
+                                src={articleData.imagePath ? `${process.env.REACT_APP_API_URL}${articleData.imagePath}` : '/img/placeholder.jpg'}
                                 alt={articleData.title}
                                 className="article-image"
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = '/img/placeholder.jpg';
+                                }}
                             />
                             {!isAvailable && (
                                 <div className="unavailable-overlay">
@@ -167,7 +179,7 @@ const Article = () => {
 
                     <div className="article-details">
                         <div className="article-header">
-                            <h1 className="article-title">{articleData.title}</h1>
+                            <h1 className="article-title">{articleData.title || 'Cocktail sans nom'}</h1>
                         </div>
 
                         <div className="article-price">
@@ -175,40 +187,43 @@ const Article = () => {
                         </div>
 
                         <div className="article-description">
-                            <p>{articleData.description}</p>
+                            <p>{articleData.description || 'Aucune description disponible'}</p>
                         </div>
 
                         <div className="article-ingredients">
                             <h3>Ingrédients</h3>
                             <ul className="ingredients-list">
-                                {articleData.ingredients && articleData.ingredients.map((ingredient, index) => {
-                                    // Trouver l'ingrédient correspondant dans la liste complète
-                                    const stockIngredient = ingredientsResponse.find(
-                                        ing => ing.name.toLowerCase() === ingredient.name.toLowerCase()
-                                    );
+                                {articleData.ingredients && articleData.ingredients.length > 0 ? (
+                                    articleData.ingredients.map((ingredient, index) => {
+                                        const stockIngredient = ingredientsResponse.find(
+                                            ing => ing.name && ingredient.name &&
+                                                ing.name.toLowerCase() === ingredient.name.toLowerCase()
+                                        );
 
-                                    const isIngredientAvailable = stockIngredient &&
-                                        stockIngredient.quantity >= ingredient.quantity;
+                                        const isIngredientAvailable = stockIngredient &&
+                                            stockIngredient.quantity >= ingredient.quantity;
 
-                                    return (
-                                        <li key={index} className={`ingredient-item ${!isIngredientAvailable ? 'unavailable' : ''}`}>
-                                            <span className="ingredient-name">
-                                                {ingredient.name}
-                                                {!isIngredientAvailable && (
-                                                    <span className="stock-warning"> (En rupture)</span>
-                                                )}
-                                            </span>
-                                            <span className="ingredient-quantity">
-                                                {ingredient.quantity} {ingredient.unit || 'ml'}
-                                            </span>
-                                        </li>
-                                    );
-                                })}
+                                        return (
+                                            <li key={index} className={`ingredient-item ${!isIngredientAvailable ? 'unavailable' : ''}`}>
+                                                <span className="ingredient-name">
+                                                    {ingredient.name}
+                                                    {!isIngredientAvailable && (
+                                                        <span className="stock-warning"> (En rupture)</span>
+                                                    )}
+                                                </span>
+                                                <span className="ingredient-quantity">
+                                                    {ingredient.quantity} {ingredient.unit || 'ml'}
+                                                </span>
+                                            </li>
+                                        );
+                                    })
+                                ) : (
+                                    <li className="ingredient-item">Aucun ingrédient disponible</li>
+                                )}
                             </ul>
                         </div>
 
                         <div className="article-actions">
-
                             <button
                                 className={`add-to-cart-button ${!isAvailable ? 'disabled' : ''}`}
                                 disabled={!isAvailable}
