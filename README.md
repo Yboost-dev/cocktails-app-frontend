@@ -21,7 +21,6 @@ Délices Cocktails est une application web moderne dédiée aux amateurs de cock
 - **React** - Bibliothèque JavaScript pour créer des interfaces utilisateur
 - **React Router Dom** - Gestion des routes et navigation
 - **React Toastify** - Notifications utilisateur élégantes
-- **Axios** - Client HTTP pour les requêtes API
 - **SASS** - Préprocesseur CSS pour des styles avancés
 - **Stripe JS** - Intégration de paiements sécurisés
 - **React Icons** - Bibliothèque d'icônes pour React
