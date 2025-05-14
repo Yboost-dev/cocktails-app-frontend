@@ -15,6 +15,20 @@ Délices Cocktails est une application web moderne dédiée aux amateurs de cock
 - **Interface d'administration** : Gérez les produits, les ingrédients, les utilisateurs et les catégories
 - **Authentification sécurisée** : Système de connexion avec différents niveaux d'accès (client, employé, administrateur)
 
+
+##  🛠️ Technologies utilisées
+
+- **React** - Bibliothèque JavaScript pour créer des interfaces utilisateur
+- **React Router Dom** - Gestion des routes et navigation
+- **React Toastify** - Notifications utilisateur élégantes
+- **Axios** - Client HTTP pour les requêtes API
+- **SASS** - Préprocesseur CSS pour des styles avancés
+- **Stripe JS** - Intégration de paiements sécurisés
+- **React Icons** - Bibliothèque d'icônes pour React
+- **Font Awesome** - Bibliothèque d'icônes vectorielles
+- **Lucide React** - Ensemble d'icônes consistantes et personnalisables
+
+
 ## 🚀 Installation
 
 Pour commencer, vous devez installer les dépendances du projet. Dans votre terminal, exécutez :
